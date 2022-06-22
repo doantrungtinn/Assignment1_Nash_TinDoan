@@ -1,8 +1,8 @@
-package Service;
+package Assignmet_TinDoan.restapi.Service;
 
 
-import Models.product;
-import Repository.productRepository;
+import Assignmet_TinDoan.restapi.Models.product;
+import Assignmet_TinDoan.restapi.Repository.productRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

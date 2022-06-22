@@ -1,6 +1,6 @@
-package Repository;
+package Assignmet_TinDoan.restapi.Repository;
 
-import Models.rating;
+import Assignmet_TinDoan.restapi.Models.rating;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

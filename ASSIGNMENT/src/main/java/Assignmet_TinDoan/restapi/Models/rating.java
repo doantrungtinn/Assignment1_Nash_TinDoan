@@ -1,4 +1,4 @@
-package Models;
+package Assignmet_TinDoan.restapi.Models;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 
