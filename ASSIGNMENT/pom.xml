@@ -26,7 +26,11 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -43,12 +47,17 @@
 			<artifactId>lombok</artifactId>
 		</dependency>
 	</dependencies>
-
+<!--	<plugin>-->
+<!--		<groupId>org.springframework.boot</groupId>-->
+<!--		<artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--		<version>${project.parent.version}</version>-->
+<!--	</plugin>-->
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<version>${project.parent.version}</version>
 				<configuration>
 					<excludes>
 						<exclude>
@@ -59,6 +68,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
 	</build>
 
 </project>
