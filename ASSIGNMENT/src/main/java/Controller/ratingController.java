@@ -6,6 +6,7 @@ import Repository.ratingRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -16,9 +17,11 @@ public class ratingController {
     @Autowired
     private ratingRespository repository;
 
-    @GetMapping("")
+    @RequestMapping(value = {"/rating"}, method = {RequestMethod.GET})
     public List<rating> findAll(){
-        return repository.findAll();
+//        return 0 repository.findAll();
+        System.out.println("abc");
+        return findAll();
     }
 
 }
