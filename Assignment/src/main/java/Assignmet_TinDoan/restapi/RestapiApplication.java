@@ -1,9 +1,12 @@
 package Assignmet_TinDoan.restapi;
 
+import Controller.productController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+//@ComponentScan( {productController.class})
 public class RestapiApplication {
 
 	public static void main(String[] args) {

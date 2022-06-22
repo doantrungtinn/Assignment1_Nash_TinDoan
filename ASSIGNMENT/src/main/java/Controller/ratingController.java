@@ -11,15 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rating")
+//@RequestMapping("./rating")
+@RequestMapping(value = {"/rating"}, method = {RequestMethod.GET})
 public class ratingController {
     @Autowired
     private ratingRepository repository;
 
-    @RequestMapping(value = {"/rating"}, method = {RequestMethod.GET})
+
     public List<rating> findAll(){
-//        return 0 repository.findAll();
-        System.out.println("abc");
         return findAll();
     }
 
