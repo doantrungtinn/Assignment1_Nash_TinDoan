@@ -8,14 +8,17 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="restapi" />
+        <module name="ASSIGNMENT" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="ASSIGNMENT" target="17" />
       <module name="restapi" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ASSIGNMENT" options="-parameters" />
       <module name="restapi" options="-parameters" />
     </option>
   </component>

@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/product")
-public class productController {
+public class ProductController {
 
     @Autowired
     private ProductRepository productrepository;
