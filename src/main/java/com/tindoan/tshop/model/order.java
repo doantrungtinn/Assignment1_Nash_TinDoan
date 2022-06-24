@@ -16,10 +16,11 @@ public class order {
     public order() {
     }
 
-    public order(customer customer, product product, String payment) {
+    public order(customer customer, product product, Integer size, String payment) {
         this.customer = customer;
         this.product = product;
         this.payment = payment;
+        this.size = size;
     }
 
     @Column(name = "payment")
@@ -28,13 +29,22 @@ public class order {
     @Column(name = "order_date")
     private LocalDate order_date = LocalDate.now();
 
+    @Column(name = "size")
+    private static Integer size;
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private customer customer;
 
+
     @ManyToOne
     @JoinColumn(name = "product_id")
     private product product;
+
+    public static int size() {
+        return 0;
+    }
+
 
     public LocalDate getOrder_date() {
         return this.order_date;
@@ -74,5 +84,13 @@ public class order {
 
     public Long getId() {
         return id;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
     }
 }

@@ -12,8 +12,8 @@ public class role {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "role_name")
+    private String role_name;
 
     @Column(name = "allowed_resource")
     private String allowedResource;
@@ -42,11 +42,11 @@ public class role {
     }
 
     public String getName() {
-        return name;
+        return role_name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.role_name = role_name;
     }
 
     public String getAllowedResource() {
@@ -97,23 +97,23 @@ public class role {
         this.users = users;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        role role = (role) o;
-        return id == role.id &&
-                allowedRead == role.allowedRead &&
-                allowedCreate == role.allowedCreate &&
-                allowedUpdate == role.allowedUpdate &&
-                allowedDelete == role.allowedDelete &&
-                name.equals(role.name) &&
-                allowedResource.equals(role.allowedResource);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, allowedResource, allowedRead, allowedCreate, allowedUpdate, allowedDelete);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        role role = (role) o;
+//        return id == role.id &&
+//                allowedRead == role.allowedRead &&
+//                allowedCreate == role.allowedCreate &&
+//                allowedUpdate == role.allowedUpdate &&
+//                allowedDelete == role.allowedDelete &&
+//                name.equals(role.name) &&
+//                allowedResource.equals(role.allowedResource);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id, name, allowedResource, allowedRead, allowedCreate, allowedUpdate, allowedDelete);
+//    }
 }
 

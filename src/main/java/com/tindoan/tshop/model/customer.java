@@ -18,11 +18,9 @@ public class customer {
     public customer() {
     }
 
-    public customer(int id){
-        this.id = id;
-    }
 
-    public customer(String name, String email, String password, String address) {
+    public customer(Integer id, String name, String email, String password, String address) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
@@ -80,7 +78,7 @@ public class customer {
 
     public Set<order> getOrders() {
         try {
-            int size = orders.size();
+            int size = order.size();
         }
         catch (Exception e) {
             return null;
