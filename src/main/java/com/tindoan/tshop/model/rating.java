@@ -16,6 +16,8 @@ import javax.persistence.*;
 public class rating {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+
     @Column(name = "id")
     private Integer id;
 
@@ -26,7 +28,24 @@ public class rating {
     private String review_id;
 
     @Column(name = "user_id")
-    private String user_id;
+    private Integer user_id;
+//
+
+    //    //ket noi nhieu 1
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    private users user;
+//
+    public rating(){
+        
+    }
+    
+    public rating(Integer id, String rating, String review_id, Integer user_id){
+        this.id = id;
+        this.rating = rating;
+        this.review_id = review_id;
+        this.user_id = user_id;
+    }
 
     public Integer getId() {
         return id;
@@ -52,21 +71,19 @@ public class rating {
         this.review_id = review_id;
     }
 
-    public String getUser_id() {
+    public Integer getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(String user_id) {
+    public void setUser_id(Integer user_id) {
         this.user_id = user_id;
     }
 
-    @Override
-    public String toString() {
-        return "rating{" +
-                "id=" + id +
-                ", rating='" + rating + '\'' +
-                ", review_id='" + review_id + '\'' +
-                ", user_id='" + user_id + '\'' +
-                '}';
+    public users getUser() {
+        return user;
+    }
+
+    public void setUser(users user) {
+        this.user = user;
     }
 }
