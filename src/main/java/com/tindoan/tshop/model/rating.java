@@ -2,50 +2,40 @@ package com.tindoan.tshop.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import javax.annotation.processing.Generated;
-import javax.persistence.*;
-
 @Entity
-@Table(name= "rating")
-
+@Table(name = "rating")
 public class rating {
+
+    public rating(){
+
+    }
+
+    public rating(Integer id, String comment, String rating_star, Integer account_id, Integer product_id){
+        this.id = id;
+        this.comment = comment;
+        this.rating_star = rating_star;
+        this.account_id = account_id;
+        this.product_id = product_id;
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "rating")
-    private String rating;
+    @Column(name = "comment")
+    private String comment;
 
-    @Column(name = "review_id")
-    private String review_id;
+    @Column(name = "rating_star")
+    private String rating_star;
 
-    @Column(name = "user_id")
-    private Integer user_id;
-//
+    @Column(name = "account_id")
+    private Integer account_id;
 
-    //    //ket noi nhieu 1
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
-    private users user;
-//
-    public rating(){
-        
-    }
-    
-    public rating(Integer id, String rating, String review_id, Integer user_id){
-        this.id = id;
-        this.rating = rating;
-        this.review_id = review_id;
-        this.user_id = user_id;
-    }
+    @Column(name = "product_id")
+    private Integer product_id;
 
     public Integer getId() {
         return id;
@@ -55,35 +45,35 @@ public class rating {
         this.id = id;
     }
 
-    public String getRating() {
-        return rating;
+    public String getComment() {
+        return comment;
     }
 
-    public void setRating(String rating) {
-        this.rating = rating;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public String getReview_id() {
-        return review_id;
+    public String getRating_star() {
+        return rating_star;
     }
 
-    public void setReview_id(String review_id) {
-        this.review_id = review_id;
+    public void setRating_star(String rating_star) {
+        this.rating_star = rating_star;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getAccount_id() {
+        return account_id;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setAccount_id(Integer account_id) {
+        this.account_id = account_id;
     }
 
-    public users getUser() {
-        return user;
+    public Integer getProduct_id() {
+        return product_id;
     }
 
-    public void setUser(users user) {
-        this.user = user;
+    public void setProduct_id(Integer product_id) {
+        this.product_id = product_id;
     }
 }

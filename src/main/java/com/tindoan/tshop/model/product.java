@@ -1,28 +1,57 @@
 package com.tindoan.tshop.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.ui.Model;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
+import java.math.BigDecimal;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
-public class product {
+public class product  {
+
+
+    public product() {
+
+    }
+
+
+    public product(Integer id, String name, String description, BigDecimal price, int stock, Integer brand_id) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.stock = stock;
+        this.id = id;
+        this.brand_id = brand_id;
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-
     @Column(name = "name")
     private String name;
 
-    @Column(name = "category_id")
-    private Integer category_id;
-
-    @Column(name = "inventory_id")
-    private Integer inventory_id;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "price")
-    private String price;
+    private BigDecimal price;
 
+    @Column(name = "stock")
+    private int stock;
+
+    @Column(name = "brand_id")
+    private Integer brand_id;
+
+    public Integer getBrand_id() {
+        return brand_id;
+    }
+
+    public void setBrand_id(Integer brand_id) {
+        this.brand_id = brand_id;
+    }
 
     public Integer getId() {
         return id;
@@ -32,46 +61,9 @@ public class product {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
+    //    @JsonIgnore
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+//    private Set<order> orders;
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public Integer getCategory_id() {
-        return category_id;
-    }
-
-    public void setCategory_id(Integer category_id) {
-        this.category_id = category_id;
-    }
-
-    public Integer getInventory_id() {
-        return inventory_id;
-    }
-
-    public void setInventory_id(Integer inventory_id) {
-        this.inventory_id = inventory_id;
-    }
-
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    @Override
-    public String toString() {
-        return "product{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", category_id=" + category_id +
-                ", inventory_id=" + inventory_id +
-                ", price='" + price + '\'' +
-                '}';
-    }
 }
