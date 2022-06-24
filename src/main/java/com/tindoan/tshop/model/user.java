@@ -2,7 +2,7 @@ package com.tindoan.tshop.model;
 
 import javax.persistence.*;
 import java.util.List;
-//import java.util.Objects;
+import java.util.Objects;
 
 @Entity
 @Table(name = "user")
@@ -27,12 +27,12 @@ public class user {
     @Column(name = "email")
     private String email;
 
-//    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-//    @JoinTable(name = "users_role",
-//            joinColumns = {@JoinColumn(name = "user_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "role_id")}
-//    )
-//    private List<role> roles;
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinTable(name = "users_role",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")}
+    )
+    private List<role> roles;
 
     public int getId() {
         return id;
@@ -82,29 +82,29 @@ public class user {
         this.email = email;
     }
 
-//    public List<role> getRoles() {
-//        return roles;
-//    }
-//
-//    public void setRoles(List<role> roles) {
-//        this.roles = roles;
-//    }
+    public List<role> getRoles() {
+        return roles;
+    }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//
-//        user user = (user) o;
-//        return id == user.id &&
-//                name.equals(user.name) &&
-//                Objects.equals(firstName, user.firstName) &&
-//                Objects.equals(lastName, user.lastName) &&
-//                email.equals(user.email);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, name, firstName, lastName, email);
-//    }
+    public void setRoles(List<role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        user user = (user) o;
+        return id == user.id &&
+                name.equals(user.name) &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName) &&
+                email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, firstName, lastName, email);
+    }
 }

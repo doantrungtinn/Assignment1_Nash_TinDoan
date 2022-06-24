@@ -18,8 +18,8 @@ public class product  {
     }
 
 
-    public product(Integer id, String name, String description, BigDecimal price, int stock, Integer brand_id) {
-        this.name = name;
+    public product(Integer id, String product_name, String description, BigDecimal price, int stock, Integer brand_id) {
+        this.product_name = product_name;
         this.description = description;
         this.price = price;
         this.stock = stock;
@@ -31,8 +31,8 @@ public class product  {
     @GeneratedValue
     @Column(name = "id")
     private Integer id;
-    @Column(name = "name")
-    private String name;
+    @Column(name = "product_name")
+    private String product_name;
 
     @Column(name = "description")
     private String description;
@@ -46,14 +46,6 @@ public class product  {
     @Column(name = "brand_id")
     private Integer brand_id;
 
-    public Integer getBrand_id() {
-        return brand_id;
-    }
-
-    public void setBrand_id(Integer brand_id) {
-        this.brand_id = brand_id;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -62,9 +54,49 @@ public class product  {
         this.id = id;
     }
 
-    //    @JsonIgnore
-//    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-//    private Set<order> orders;
+    public String getProduct_name() {
+        return product_name;
+    }
+
+    public void setProduct_name(String product_name) {
+        this.product_name = product_name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public Integer getBrand_id() {
+        return brand_id;
+    }
+
+    public void setBrand_id(Integer brand_id) {
+        this.brand_id = brand_id;
+    }
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<order> orders;
 
 
 }

@@ -13,22 +13,23 @@ import java.util.Set;
 @Entity
 @Table(name = "customer")
 public class customer {
+    @Id
     private Object id;
 
     public customer() {
     }
 
 
-    public customer(Integer id, String name, String email, String password, String address) {
+    public customer(Integer id, String customer_name, String email, String password, String address) {
         this.id = id;
-        this.name = name;
+        this.customer_name = customer_name;
         this.email = email;
         this.password = password;
         this.address = address;
     }
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "customer_name")
+    private String customer_name;
 
     @Column(name = "email")
     private String email;
@@ -44,12 +45,20 @@ public class customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<order> orders;
 
-    public String getName() {
-        return name;
+    public Object getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(Object id) {
+        this.id = id;
+    }
+
+    public String getCustomer_name() {
+        return customer_name;
+    }
+
+    public void setCustomer_name(String customer_name) {
+        this.customer_name = customer_name;
     }
 
     public String getEmail() {
@@ -100,7 +109,7 @@ public class customer {
 
         customer that = (customer) o;
         return id == that.id &&
-                name.equals(that.name) &&
+                customer_name.equals(that.customer_name) &&
                 email.equals(that.email) &&
                 password.equals(that.password) &&
                 address.equals(that.address);
@@ -110,6 +119,8 @@ public class customer {
 
     @Override
     public int hashCode(){
-        return Objects.hash(id, name, email, password, address);
+        return Objects.hash(id, customer_name, email, password, address);
     }
+
+
 }
