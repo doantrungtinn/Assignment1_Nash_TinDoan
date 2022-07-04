@@ -1,0 +1,32 @@
+.chart-div {
+  position: relative;
+  margin-left: 3rem;
+}
+.datepicker {
+  width: 12rem;
+  margin-left: 3rem;
+}
+.title-Report {
+  margin: 2rem;
+  font-weight: 600;
+  text-shadow: -2px 2px #b5ffd9;
+}
+.profit{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1rem;
+}
+.profit-text-RaE{
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 0;
+}
+.profit-num-RaE{
+  display: flex;
+  justify-content: flex-start;
+  margin: 0;
+  padding-left: 0 !important;
+}
+.price_Rae{
+  color: orangered;
+}

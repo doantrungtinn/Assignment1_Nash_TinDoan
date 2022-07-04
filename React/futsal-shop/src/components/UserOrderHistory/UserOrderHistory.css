@@ -1,0 +1,74 @@
+.prod-form {
+  text-align: left;
+  right: 3rem;
+  border: 0.25px solid #333;
+  border-width: medium;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  width: 70%;
+}
+.status-order {
+  display: flex;
+}
+.status-true {
+  margin-left: 1rem;
+  color: yellowgreen;
+}
+.status-false {
+  margin-left: 1rem;
+  color: orangered;
+}
+.orderHistory {
+  display: flex;
+  justify-content: center;
+  margin-right: 3rem;
+}
+.priceTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  display: inline-block;
+}
+.priceTotal {
+  font-size: 1.5rem;
+  font-weight: 600;
+  justify-content: flex-end;
+}
+.priceNumTotal {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-left: 1rem;
+  color: #ff3f00;
+}
+.info-prod-order {
+  text-align: left;
+}
+.cancelBtn-historyUser {
+  text-align: right;
+}
+.statusUserHistoryColor-InProcess {
+  margin-left: 1rem;
+  color: #ffb319;
+}
+.statusUserHistoryColor-Delivery {
+  margin-left: 1rem;
+  color: #185adb;
+}
+.statusUserHistoryColor-Complete {
+  margin-left: 1rem;
+  color: #6ecb63;
+}
+.statusUserHistoryColor-Canceled {
+  margin-left: 1rem;
+  color: #ff0000;
+}
+.payment_UserOrderHistory{
+  display: flex;
+}
+.paymentStatusTrue_UserOrderHistory{
+  margin-left: 1rem;
+  color: #6ecb63;
+}
+.paymentStatusFalse_UserOrderHistory{
+  margin-left: 1rem;
+  color: #ff3f00;
+}

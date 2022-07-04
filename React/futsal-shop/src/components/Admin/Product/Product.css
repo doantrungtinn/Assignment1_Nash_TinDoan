@@ -1,0 +1,29 @@
+.title-ProductAdmin {
+  margin: 2rem;
+  font-weight: 600;
+  text-shadow: -2px 2px #FFAAA5;
+}
+.titleTale-ProductAdmin{
+    font-weight: 600;
+  text-shadow: -2px 2px #FFAAA5;
+}
+.btn-list {
+  /* display: flex; */
+  /* text-align: left; */
+  /* width: 100%; */
+  margin: 1rem;
+  margin-left: 3rem;
+}
+.titleControl-ProdAdmin {
+  /* margin-top: 1rem; */
+  width: 100%;
+}
+.tableProd {
+  margin-left: 1rem;
+}
+.divTextAlignRight{
+  text-align: right;
+}
+.divTextAlignLeft{
+  text-align: left;
+}
