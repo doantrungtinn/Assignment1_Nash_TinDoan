@@ -1,5 +1,5 @@
 import { getCookie } from "./Cookie";
-import { getWithAuth } from "../Utils/httpHelper";
+// import { getWithAuth } from "../Utils/httpHelper";
 
 export function isAdminLogin() {
   const status = getCookie("status");

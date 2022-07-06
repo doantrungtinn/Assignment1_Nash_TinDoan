@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Login from "./components/Login";
-import FNFPage from "./components/404Page/404.js";
+// import FNFPage from "./components/404Page/404.js";
 import ForgetPassword from "./components/Login/ModalForgotPass";
 import Admin from "./components/Admin";
 import Order from "./components/Order";
@@ -29,7 +29,7 @@ function App() {
           <Home1 />
           <Footer />
         </Route>
-        <Route exact path="/Bike/:id">
+        <Route exact path="/Shoes/:id">
           <Header />
           <Navbar />
           <ProductByType />
@@ -50,12 +50,12 @@ function App() {
           <ForgetPassword />
           <Footer />
         </Route>
-        <Route exact path="/404">
+        {/* <Route exact path="/404">
           <Header />
           <Navbar />
           <FNFPage />
           <Footer />
-        </Route>
+        </Route> */}
         <PrivateRouteAdmin exact path="/Admin" component={Admin} />
         <PrivateRouteUser exact path="/Ordering" component={Order} />
         <PrivateRouteUser exact path="/OrderHistory" component={UserOrderHistory} />
