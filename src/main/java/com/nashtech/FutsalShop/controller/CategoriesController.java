@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nashtech.FutsalShop.DTO.CategoriesDTO;
 import com.nashtech.FutsalShop.Utils.StringUtils;
-import com.nashtech.FutsalShop.model.categories;
-import com.nashtech.FutsalShop.model.person;
+import com.nashtech.FutsalShop.model.Categories;
+import com.nashtech.FutsalShop.model.Person;
 import com.nashtech.FutsalShop.exception.ObjectAlreadyExistException;
 import com.nashtech.FutsalShop.exception.ObjectNotFoundException;
 import com.nashtech.FutsalShop.exception.ObjectViolateForeignKeyException;
@@ -57,14 +57,14 @@ public class CategoriesController {
 
 	@Operation(summary = "Get Categories by ID")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = categories.class)) }),
+			@Content(mediaType = "application/json", schema = @Schema(implementation = Categories.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@GetMapping("/categories/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('STAFF') or  hasRole('ADMIN')")
-	public categories findCategories(@PathVariable(name = "id") int id) {
+	public Categories findCategories(@PathVariable(name = "id") int id) {
 		return cateService.getCategories(id)
 				.orElseThrow(() -> new ObjectNotFoundException("Could not find categories with Id: " + id));
 	}
@@ -78,7 +78,7 @@ public class CategoriesController {
 
 	@Operation(summary = "Create/Update Categories")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = categories.class)) }),
+			@Content(mediaType = "application/json", schema = @Schema(implementation = Categories.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
@@ -89,7 +89,7 @@ public class CategoriesController {
 		String jwt = JwtAuthTokenFilter.parseJwt(request);
 		String userId = jwtUtils.getUserNameFromJwtToken(jwt);
 		try {
-			person person = personService.getPerson(Integer.parseInt(userId)).get();
+			Person person = personService.getPerson(Integer.parseInt(userId)).get();
 			boolean check = cateService.createCategories(newCate);
 			if (check)
 				logger.info("Account id " + userId + " created category id " + newCate.getId() + " success");
@@ -113,7 +113,7 @@ public class CategoriesController {
 		String jwt = JwtAuthTokenFilter.parseJwt(request);
 		String userId = jwtUtils.getUserNameFromJwtToken(jwt);
 		try {
-			person person = personService.getPerson(Integer.parseInt(userId)).get();
+			Person person = personService.getPerson(Integer.parseInt(userId)).get();
 			boolean check = cateService.updateCategories(newCate);
 			if (check)
 				logger.info("Account id " + userId + " updated category id " + newCate.getId() + " success");
@@ -133,7 +133,7 @@ public class CategoriesController {
 
 	@Operation(summary = "Delete Categories")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = categories.class)) }),
+			@Content(mediaType = "application/json", schema = @Schema(implementation = Categories.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
@@ -145,8 +145,8 @@ public class CategoriesController {
 		String userId = jwtUtils.getUserNameFromJwtToken(jwt);
 		try {
 
-			person person = personService.getPerson(Integer.parseInt(userId)).get();
-			categories category = cateService.getCategories(id).get();
+			Person person = personService.getPerson(Integer.parseInt(userId)).get();
+			Categories category = cateService.getCategories(id).get();
 			boolean check = cateService.deleteCategories(category);
 			if (check)
 				logger.info("Account id " + userId + " delete category " + category.getId() + " success");

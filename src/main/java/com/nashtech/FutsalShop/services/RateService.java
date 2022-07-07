@@ -3,14 +3,14 @@ package com.nashtech.FutsalShop.services;
 import java.util.List;
 
 import com.nashtech.FutsalShop.DTO.RateDTO;
-import com.nashtech.FutsalShop.model.rate;
+import com.nashtech.FutsalShop.model.Rate;
 
 public interface RateService {
-	public List<rate> getRateByProduct(String id);
+	public List<Rate> getRateByProduct(String id);
 
-	public List<rate> getRateProductPage(String id, int pageNum, int size);
+	public List<Rate> getRateProductPage(String id, int pageNum, int size);
 
-	public rate createRate(RateDTO rate);
+	public Rate createRate(RateDTO rate);
 
 	public boolean deleteRate(int id, String email);
 

@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.nashtech.FutsalShop.DTO.ReportProdProcess;
 import com.nashtech.FutsalShop.DTO.ReportTopProduct;
-import com.nashtech.FutsalShop.model.orderdetail;
-import com.nashtech.FutsalShop.model.order;
-import com.nashtech.FutsalShop.model.product;
+import com.nashtech.FutsalShop.model.Orderdetail;
+import com.nashtech.FutsalShop.model.Order;
+import com.nashtech.FutsalShop.model.Product;
 import com.nashtech.FutsalShop.repository.OrderImportRepository;
 import com.nashtech.FutsalShop.repository.OrderRepository;
 import com.nashtech.FutsalShop.services.OrderImportService;
@@ -59,7 +59,7 @@ public class ReportServiceImpl implements ReportService {
 		}
 		return profit;
 	}
-	public List<product> hotProduct(int size){
+	public List<Product> hotProduct(int size){
 		String sqlQuery = "select p.id as id, p.name as name, p.price as price, p.quantity as quantity,"
 				+ "p.photo as photo, sum(o2.amount) as totalsold from products p , orderbill o ,orderdetails o2, categories c "
 				+ "where o2.orderid =o.id and o2.productid = p.id and p.quantity > 0"
@@ -131,11 +131,11 @@ public class ReportServiceImpl implements ReportService {
 	}
 	
 	public double profitAvgMonth(int month, int year) {
-		List<order> orderList = orderRepo.getOrderFromMonth(month, year);
+		List<Order> orderList = orderRepo.getOrderFromMonth(month, year);
 		// Profit
 		Map<String, Integer> prodList = new HashMap<>();
-		for (com.nashtech.FutsalShop.model.order order : orderList) {
-			for (orderdetail detail : order.getOrderDetails()) {
+		for (Order order : orderList) {
+			for (Orderdetail detail : order.getOrderDetails()) {
 				String prodId = detail.getId().getProductId();
 				if (prodList.isEmpty() || !prodList.containsKey(prodId)) {	
 					prodList.put(prodId, detail.getAmmount());

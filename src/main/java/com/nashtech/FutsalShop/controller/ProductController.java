@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nashtech.FutsalShop.DTO.ProductDTO;
 import com.nashtech.FutsalShop.Utils.StringUtils;
-import com.nashtech.FutsalShop.model.product;
+import com.nashtech.FutsalShop.model.Product;
 import com.nashtech.FutsalShop.exception.ObjectAlreadyExistException;
 import com.nashtech.FutsalShop.exception.ObjectNotFoundException;
 import com.nashtech.FutsalShop.security.JWT.JwtUtils;
@@ -48,7 +48,7 @@ public class ProductController {
 
 	@GetMapping("/product/search/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('STAFF') or hasRole('ADMIN')")
-	public product getProduct(@PathVariable(name = "id") String id) {
+	public Product getProduct(@PathVariable(name = "id") String id) {
 		return productService.getProductInludeDeleted(id)
 				.orElseThrow(() -> new ObjectNotFoundException("Could not find product with Id: " + id));
 	}
@@ -56,7 +56,7 @@ public class ProductController {
 	@Operation(summary = "Create a Product")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = product.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Product.class)) }),
 			@ApiResponse(responseCode = "303", description = "Error: Have an existed product ", content = @Content),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
@@ -65,7 +65,7 @@ public class ProductController {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@PostMapping("/product")
 	@PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
-	public product saveProduct(HttpServletRequest request, @RequestBody ProductDTO newProduct) {
+	public Product saveProduct(HttpServletRequest request, @RequestBody ProductDTO newProduct) {
 		String jwt = JwtAuthTokenFilter.parseJwt(request);
 		String id = jwtUtils.getUserNameFromJwtToken(jwt);
 		return productService.createProduct(newProduct, Integer.parseInt(id));
@@ -92,7 +92,7 @@ public class ProductController {
 	@Operation(summary = "Delete a Product by id")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = product.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Product.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
@@ -112,7 +112,7 @@ public class ProductController {
 	@Operation(summary = "Update a Product")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = product.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Product.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),

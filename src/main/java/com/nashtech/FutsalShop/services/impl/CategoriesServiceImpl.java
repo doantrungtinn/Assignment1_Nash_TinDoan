@@ -10,7 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.nashtech.FutsalShop.DTO.CategoriesDTO;
-import com.nashtech.FutsalShop.model.categories;
+import com.nashtech.FutsalShop.model.Categories;
 import com.nashtech.FutsalShop.exception.ObjectAlreadyExistException;
 import com.nashtech.FutsalShop.repository.CategoriesRepository;
 import com.nashtech.FutsalShop.services.CategoriesService;
@@ -24,12 +24,12 @@ public class CategoriesServiceImpl implements CategoriesService {
 	@Autowired
 	ProductService productService;
 
-	public List<categories> retrieveCategories() {
+	public List<Categories> retrieveCategories() {
 		Sort sortable = Sort.by("id").ascending();
 		return categoriesRepository.findByStatusNot(sortable,false);
 	}
 
-	public Optional<categories> getCategories(int id) {
+	public Optional<Categories> getCategories(int id) {
 		return categoriesRepository.findByIdAndStatusNot(id, false);
 	}
 
@@ -37,7 +37,7 @@ public class CategoriesServiceImpl implements CategoriesService {
 		try {
 			boolean checkName = checkExistName(0, categoriesDTO.getName());
 			if (checkName) {
-				categories categoriesConvert = new categories(categoriesDTO);
+				Categories categoriesConvert = new Categories(categoriesDTO);
 				categoriesConvert.setStatus(true);
 				categoriesRepository.save(categoriesConvert);
 				return true;
@@ -50,7 +50,7 @@ public class CategoriesServiceImpl implements CategoriesService {
 	}
 
 	public boolean checkExistName(int id, String name) {
-		List<categories> cateList = categoriesRepository.findByNameIgnoreCaseAndStatusNot(name, false);
+		List<Categories> cateList = categoriesRepository.findByNameIgnoreCaseAndStatusNot(name, false);
 		if (cateList.isEmpty())
 			return true;
 		else if ((cateList.size() > 1) || ((cateList.size() == 1) && (cateList.get(0).getId() != id)))
@@ -59,7 +59,7 @@ public class CategoriesServiceImpl implements CategoriesService {
 			return true;
 	}
 
-	public boolean deleteCategories(categories category) {
+	public boolean deleteCategories(Categories category) {
 //		categoriesRepository.deleteById(id);
 		category.setStatus(false);
 		categoriesRepository.save(category);
@@ -71,7 +71,7 @@ public class CategoriesServiceImpl implements CategoriesService {
 		try {
 			boolean check = checkExistName(categoriesDTO.getId(), categoriesDTO.getName());
 			if (check) {
-				categories categoriesConvert = new categories(categoriesDTO);
+				Categories categoriesConvert = new Categories(categoriesDTO);
 				categoriesConvert.setStatus(true);
 				categoriesRepository.save(categoriesConvert);
 				return true;

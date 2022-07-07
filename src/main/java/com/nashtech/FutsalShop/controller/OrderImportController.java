@@ -26,10 +26,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.nashtech.FutsalShop.DTO.OrderImportDTO;
 import com.nashtech.FutsalShop.DTO.OrderImportDetailDTO;
-import com.nashtech.FutsalShop.model.orderimportdetail;
-import com.nashtech.FutsalShop.model.orderimport;
-import com.nashtech.FutsalShop.model.person;
-import com.nashtech.FutsalShop.model.product;
+import com.nashtech.FutsalShop.model.Orderimportdetail;
+import com.nashtech.FutsalShop.model.Orderimport;
+import com.nashtech.FutsalShop.model.Person;
+import com.nashtech.FutsalShop.model.Product;
 import com.nashtech.FutsalShop.exception.ObjectNotFoundException;
 import com.nashtech.FutsalShop.exception.ObjectPropertiesIllegalException;
 import com.nashtech.FutsalShop.payload.response.MessageResponse;
@@ -87,7 +87,7 @@ public class OrderImportController {
 			@RequestBody OrderImportDTO newOrderImportDto) {
 		String jwt = JwtAuthTokenFilter.parseJwt(request);
 		String userId = jwtUtils.getUserNameFromJwtToken(jwt);
-		person personImport = personService.getPerson(newOrderImportDto.getEmployeeEmail());
+		Person personImport = personService.getPerson(newOrderImportDto.getEmployeeEmail());
 		if (personImport == null) {
 			logger.error("Create import failed: Employee not found with email " + newOrderImportDto.getEmployeeEmail());
 			throw new ObjectNotFoundException("Employee not found");
@@ -98,21 +98,21 @@ public class OrderImportController {
 					"Create import failed: Employee Id create import not match Employee Id send request");
 		}
 		Set<OrderImportDetailDTO> importDetailDtoList = newOrderImportDto.getOrderImportDetails();
-		Set<orderimportdetail> importDetailEntityList = new HashSet<orderimportdetail>();
-		orderimport orderImport = orderImportService.convertToEntity(newOrderImportDto);
+		Set<Orderimportdetail> importDetailEntityList = new HashSet<Orderimportdetail>();
+		Orderimport orderImport = orderImportService.convertToEntity(newOrderImportDto);
 		for (OrderImportDetailDTO detailDto : importDetailDtoList) {
-			product product = productService.getProduct(detailDto.getProductId()).orElse(null);
+			Product product = productService.getProduct(detailDto.getProductId()).orElse(null);
 			if (product == null) {
 				logger.error("Account id " + personImport.getId() + " create Import failed: Product ID "
 						+ detailDto.getProductId() + " not found!");
 				throw new ObjectNotFoundException("Product ID " + detailDto.getProductId() + " not found!");
 			}
-			orderimportdetail detailEntity = importDetailService.convertToEntity(detailDto);
+			Orderimportdetail detailEntity = importDetailService.convertToEntity(detailDto);
 			detailEntity.setOrder(orderImport);
 			importDetailEntityList.add(detailEntity);
 		}
 		orderImport.setOrderImportDetails(importDetailEntityList);
-		orderimport orderImportCreated = orderImportService.createOrderImport(orderImport, Integer.parseInt(userId));
+		Orderimport orderImportCreated = orderImportService.createOrderImport(orderImport, Integer.parseInt(userId));
 		logger.info("Account id " + personImport.getId() + " create Import success");
 		return new ResponseEntity<OrderImportDTO>(orderImportService.convertToDto(orderImportCreated), HttpStatus.OK);
 
@@ -124,7 +124,7 @@ public class OrderImportController {
 			@RequestParam("file") MultipartFile reapExcelDataFile) {
 		String jwt = JwtAuthTokenFilter.parseJwt(request);
 		String email = jwtUtils.getUserNameFromJwtToken(jwt);
-		orderimport orderImportCreated = orderImportService.createOrderFromXLSS(reapExcelDataFile, email);
+		Orderimport orderImportCreated = orderImportService.createOrderFromXLSS(reapExcelDataFile, email);
 		return new ResponseEntity<OrderImportDTO>(orderImportService.convertToDto(orderImportCreated), HttpStatus.OK);
 
 	}
@@ -140,7 +140,7 @@ public class OrderImportController {
 	@PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
 	public ResponseEntity<?> getOrderImport(@RequestParam(name = "pagenum") int page,
 			@RequestParam(name = "size") int size) {
-		List<orderimport> orderimport = orderImportService.getOrderImportPage(page, size);
+		List<Orderimport> orderimport = orderImportService.getOrderImportPage(page, size);
 		List<OrderImportDTO> orderImportDto = orderimport.stream().map(orderImportService::convertToDto)
 				.collect(Collectors.toList());
 		return new ResponseEntity<List<OrderImportDTO>>(orderImportDto, HttpStatus.OK);
@@ -163,7 +163,7 @@ public class OrderImportController {
 	@GetMapping("/imports/{importId}")
 	@PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
 	public ResponseEntity<?> getOrderImportDetail(@PathVariable int importId) {
-		orderimport orderImport = orderImportService.findOrderImportById(importId);
+		Orderimport orderImport = orderImportService.findOrderImportById(importId);
 		if (orderImport == null) {
 			throw new ObjectNotFoundException("Order import not found with id: " + importId);
 		}
@@ -184,12 +184,12 @@ public class OrderImportController {
 			@PathVariable(name = "importId") int importId) {
 		String jwt = JwtAuthTokenFilter.parseJwt(request);
 		String userId = jwtUtils.getUserNameFromJwtToken(jwt);
-		orderimport orderImport = orderImportService.findOrderImportById(importId);
+		Orderimport orderImport = orderImportService.findOrderImportById(importId);
 		if (orderImport == null) {
 			throw new ObjectNotFoundException("Order import not found!");
 		}
 
-		orderimport orderImportUpdate = orderImportService.updateOrderImport(orderImportDto, importId, Integer.parseInt(userId));
+		Orderimport orderImportUpdate = orderImportService.updateOrderImport(orderImportDto, importId, Integer.parseInt(userId));
 		if (orderImportUpdate == null) {
 			return ResponseEntity.internalServerError().body(new MessageResponse("Update order import fail!"));
 		}
@@ -210,7 +210,7 @@ public class OrderImportController {
 			@PathVariable(name = "importId") int importId) {
 		String jwt = JwtAuthTokenFilter.parseJwt(request);
 		String userId = jwtUtils.getUserNameFromJwtToken(jwt);
-		orderimport orderImport = orderImportService.findOrderImportById(importId);
+		Orderimport orderImport = orderImportService.findOrderImportById(importId);
 		if (orderImport == null) {
 			logger.error("Account id " + userId + " delete import failed: Order import not found!");
 			throw new ObjectNotFoundException("Order import not found!");

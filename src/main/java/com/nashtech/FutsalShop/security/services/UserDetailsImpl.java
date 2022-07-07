@@ -10,7 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nashtech.FutsalShop.model.user;
+import com.nashtech.FutsalShop.model.User;
 
 public class UserDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;
@@ -35,7 +35,7 @@ public class UserDetailsImpl implements UserDetails {
 		this.authorities = authorities;
 	}
 
-	public static UserDetailsImpl build(user user) {
+	public static UserDetailsImpl build(User user) {
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		authorities.add(new SimpleGrantedAuthority("role" + user.getRole()));
 		return new UserDetailsImpl(user.getId(),user.getFullname(), user.getEmail(), user.getPassword(), authorities);

@@ -6,26 +6,26 @@ import java.util.Optional;
 import javax.mail.MessagingException;
 
 import com.nashtech.FutsalShop.DTO.OrderDTO;
-import com.nashtech.FutsalShop.model.order;
+import com.nashtech.FutsalShop.model.Order;
 
 public interface OrderService {
-	public List<order> retrieveOrders();
+	public List<Order> retrieveOrders();
 
-	public Optional<order> getOrder(int id);
+	public Optional<Order> getOrder(int id);
 
-	public List<order> getOrdersByCustomerPages(int num, int size, int id);
+	public List<Order> getOrdersByCustomerPages(int num, int size, int id);
 
-	public List<order> getOrderPage(int num, int size);
+	public List<Order> getOrderPage(int num, int size);
 	
-	public List<order> getOrderPageByStatus(int num, int size, int status);
+	public List<Order> getOrderPageByStatus(int num, int size, int status);
 	
-	public List<order> searchOrderByCustomer(String keyword);
+	public List<Order> searchOrderByCustomer(String keyword);
 	
-	public List<order> searchOrderByStatusAndCustomer(String keyword, int status);
+	public List<Order> searchOrderByStatusAndCustomer(String keyword, int status);
 	
 	public boolean checkOrderedByProductAndCustomerId(String prodId, int customerId);
 
-	public order createOrder(OrderDTO order);
+	public Order createOrder(OrderDTO order);
 
 	public boolean deleteOrder(int id);
 
@@ -37,7 +37,7 @@ public interface OrderService {
 	
 	public boolean updateNoteOrder(int id, int status, String userId, String note);
 
-	public List<order> getOrderByCustomerEmail(int num, int size, String email);
+	public List<Order> getOrderByCustomerEmail(int num, int size, String email);
 
 	public void sendSimpleMessage(String to, String listProd, Double totalCost) throws MessagingException;
 
@@ -49,7 +49,7 @@ public interface OrderService {
 	
 	public float profitByMonth(int month, int year);
 	
-	public OrderDTO convertToDTO(order order);
+	public OrderDTO convertToDTO(Order order);
 	
 	public int getLatestId();
 	

@@ -22,11 +22,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.nashtech.FutsalShop.DTO.OrderImportDTO;
 import com.nashtech.FutsalShop.DTO.OrderImportDetailDTO;
-import com.nashtech.FutsalShop.model.orderimportdetail;
-import com.nashtech.FutsalShop.model.orderimportdetail.OrderImportDetailsKey;
-import com.nashtech.FutsalShop.model.orderimport;
-import com.nashtech.FutsalShop.model.person;
-import com.nashtech.FutsalShop.model.product;
+import com.nashtech.FutsalShop.model.Orderimportdetail;
+import com.nashtech.FutsalShop.model.Orderimportdetail.OrderImportDetailsKey;
+import com.nashtech.FutsalShop.model.Orderimport;
+import com.nashtech.FutsalShop.model.Person;
+import com.nashtech.FutsalShop.model.Product;
 import com.nashtech.FutsalShop.exception.ObjectNotFoundException;
 import com.nashtech.FutsalShop.exception.ObjectPropertiesIllegalException;
 import com.nashtech.FutsalShop.repository.OrderImportRepository;
@@ -72,7 +72,7 @@ public class OrderImportServiceImpl implements OrderImportService {
 	
 	@Override
 	@Transactional
-	public orderimport createOrderImport(orderimport orderImport, int userId) {
+	public Orderimport createOrderImport(Orderimport orderImport, int userId) {
 		if (orderImport.isStatus()) {
 			changeProductQuantityByDetailList(orderImport.getOrderImportDetails(), true, userId);
 		}
@@ -83,8 +83,8 @@ public class OrderImportServiceImpl implements OrderImportService {
 	
 	@Override
 	@Transactional
-	public orderimport createOrderFromXLSS(MultipartFile reapExcelDataFile, String email) {
-		Set<orderimportdetail> detailList = new HashSet<orderimportdetail>();
+	public Orderimport createOrderFromXLSS(MultipartFile reapExcelDataFile, String email) {
+		Set<Orderimportdetail> detailList = new HashSet<Orderimportdetail>();
 		XSSFWorkbook workbook;
 		try {
 			workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
@@ -93,25 +93,25 @@ public class OrderImportServiceImpl implements OrderImportService {
 
 		}
 		XSSFSheet worksheet = workbook.getSheetAt(0);
-		person personImport = personService.getPerson(email);
-		orderimport orderImport = new orderimport();
+		Person personImport = personService.getPerson(email);
+		Orderimport orderImport = new Orderimport();
 		orderImport.setTimeimport(LocalDateTime.now());
 		orderImport.setEmployee(personImport);
 		orderImport.setStatus(true);
-		orderimport orderImport_saved = orderImportRepo.save(orderImport);
+		Orderimport orderImport_saved = orderImportRepo.save(orderImport);
 		for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
-			orderimportdetail tempDetail = new orderimportdetail();
+			Orderimportdetail tempDetail = new Orderimportdetail();
 			XSSFRow row = worksheet.getRow(i);
 			OrderImportDetailsKey keyId = new OrderImportDetailsKey(orderImport_saved.getId(),
 					row.getCell(0).getStringCellValue());
-			Optional<orderimportdetail> detailCheck = detailList.stream()
+			Optional<Orderimportdetail> detailCheck = detailList.stream()
 					.filter(detail -> detail.getId().equals(keyId)).findAny();
 			if (detailCheck.isPresent())
 				throw new ObjectPropertiesIllegalException("Error: File wrong format, duplicate product");
 			tempDetail.setId(keyId);
 			tempDetail.setAmmount((int) row.getCell(1).getNumericCellValue());
 			tempDetail.setPrice((float) row.getCell(2).getNumericCellValue());
-			product product = productService.getProduct(keyId.getProductId()).orElse(null);
+			Product product = productService.getProduct(keyId.getProductId()).orElse(null);
 			if (product == null) {
 				throw new ObjectNotFoundException("Product ID " + keyId.getProductId() + " not found!");
 			}
@@ -129,24 +129,24 @@ public class OrderImportServiceImpl implements OrderImportService {
 	}
 
 	@Override
-	public orderimport convertToEntity(OrderImportDTO orderImportDto) {
-		orderimport orderImport = mapper.map(orderImportDto, orderimport.class);
-		person employee = personService.getPerson(orderImportDto.getEmployeeEmail());
+	public Orderimport convertToEntity(OrderImportDTO orderImportDto) {
+		Orderimport orderImport = mapper.map(orderImportDto, Orderimport.class);
+		Person employee = personService.getPerson(orderImportDto.getEmployeeEmail());
 		orderImport.setEmployee(employee);
 		return orderImport;
 	}
 
 	@Override
-	public OrderImportDTO convertToDto(orderimport orderImport) {
+	public OrderImportDTO convertToDto(Orderimport orderImport) {
 		OrderImportDTO importDto = mapper.map(orderImport, OrderImportDTO.class);
 		importDto.setEmployeeEmail(orderImport.getEmployee().getEmail());
 		importDto.setEmployeeFullName(orderImport.getEmployee().getFullname());
 		Double totalCost = 0.0;
-		for (orderimportdetail detail : orderImport.getOrderImportDetails()) {
+		for (Orderimportdetail detail : orderImport.getOrderImportDetails()) {
 			totalCost += detail.getAmmount() * detail.getPrice();
 		}
 		importDto.setTotalCost(totalCost);
-		Set<orderimportdetail> orderImportDetails = orderImport.getOrderImportDetails();
+		Set<Orderimportdetail> orderImportDetails = orderImport.getOrderImportDetails();
 		Set<OrderImportDetailDTO> orderImportDetailsDto = orderImportDetails.stream()
 				.map(orderImportDetailService::convertToDto).collect(Collectors.toSet());
 		importDto.setOrderImportDetails(orderImportDetailsDto);
@@ -154,31 +154,31 @@ public class OrderImportServiceImpl implements OrderImportService {
 	}
 
 	@Override
-	public List<orderimport> getOrderImportPage(int num, int size) {
+	public List<Orderimport> getOrderImportPage(int num, int size) {
 		Sort sortable = Sort.by("timeimport").descending();
 		Pageable pageable = PageRequest.of(num, size, sortable);
 		return orderImportRepo.findByStatusNot(pageable, false).stream().collect(Collectors.toList());
 	}
 
 	@Override
-	public orderimport findOrderImportById(int importId) {
+	public Orderimport findOrderImportById(int importId) {
 		return orderImportRepo.findById(importId).orElse(null);
 	}
 
-	public List<orderimport> searchOrderImportByEmployee(String keyword) {
+	public List<Orderimport> searchOrderImportByEmployee(String keyword) {
 		return orderImportRepo.searchImportByEmployee(keyword.toUpperCase());
 	}
 
-	private void changeProductQuantityByDetailList(Set<orderimportdetail> importDetailList, boolean isAdd, int userId) {
-		for (orderimportdetail importDetail : importDetailList) {
-			product product = productService.getProduct(importDetail.getId().getProductId()).orElse(null);
+	private void changeProductQuantityByDetailList(Set<Orderimportdetail> importDetailList, boolean isAdd, int userId) {
+		for (Orderimportdetail importDetail : importDetailList) {
+			Product product = productService.getProduct(importDetail.getId().getProductId()).orElse(null);
 			int productNewQuantity = product.getQuantity();
 			if (isAdd) {
 				productNewQuantity += importDetail.getAmmount();
 			} else {
 				productNewQuantity -= importDetail.getAmmount();
 			}
-			person employee = personService.getPerson(userId).get();
+			Person employee = personService.getPerson(userId).get();
 			product.setEmployeeUpdate(employee);
 			product.setQuantity(productNewQuantity);
 			product.setUpdateDate(LocalDateTime.now());
@@ -188,8 +188,8 @@ public class OrderImportServiceImpl implements OrderImportService {
 
 	@Override
 	@Transactional
-	public orderimport updateOrderImport(OrderImportDTO orderImportDto, int orderImportId, int userId) {
-		orderimport orderImport = findOrderImportById(orderImportId);
+	public Orderimport updateOrderImport(OrderImportDTO orderImportDto, int orderImportId, int userId) {
+		Orderimport orderImport = findOrderImportById(orderImportId);
 
 		if (!orderImport.isStatus() && orderImportDto.isStatus()) {
 			changeProductQuantityByDetailList(orderImport.getOrderImportDetails(), true, userId);
@@ -204,7 +204,7 @@ public class OrderImportServiceImpl implements OrderImportService {
 	public boolean deleteOrderImport(int orderImportId) {
 
 		return orderImportRepo.findById(orderImportId).map(order -> {
-			for (orderimportdetail detail : order.getOrderImportDetails()) {
+			for (Orderimportdetail detail : order.getOrderImportDetails()) {
 				productService.updateProductQuantityToCancel(detail.getId().getProductId(), detail.getAmmount() * (-1));
 			}
 //			PersonEntity person = personService.getPerson(order.getEmployee().getId()).get();
@@ -224,7 +224,7 @@ public class OrderImportServiceImpl implements OrderImportService {
 		return result;
 	}
 	
-	public List<orderimport> getImportByProductId(String prodId){
+	public List<Orderimport> getImportByProductId(String prodId){
 		Sort sortable = Sort.by("timeimport").ascending();
 		return orderImportRepo.findByOrderImportDetailsIdProductIdAndStatusNot(sortable, prodId, false);
 	}

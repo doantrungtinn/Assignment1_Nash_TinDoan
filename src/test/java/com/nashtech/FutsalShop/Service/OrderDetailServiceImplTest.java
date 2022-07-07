@@ -19,12 +19,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.nashtech.FutsalShop.model.categories;
-import com.nashtech.FutsalShop.model.orderdetail;
-import com.nashtech.FutsalShop.model.order;
-import com.nashtech.FutsalShop.model.person;
-import com.nashtech.FutsalShop.model.product;
-import com.nashtech.FutsalShop.model.orderdetail.OrderDetailsKey;
+import com.nashtech.FutsalShop.model.Categories;
+import com.nashtech.FutsalShop.model.Orderdetail;
+import com.nashtech.FutsalShop.model.Order;
+import com.nashtech.FutsalShop.model.Person;
+import com.nashtech.FutsalShop.model.Product;
+import com.nashtech.FutsalShop.model.Orderdetail.OrderDetailsKey;
 import com.nashtech.FutsalShop.repository.OrderDetailRepository;
 import com.nashtech.FutsalShop.services.OrderDetailService;
 import com.nashtech.FutsalShop.services.OrderService;
@@ -45,25 +45,25 @@ public class OrderDetailServiceImplTest {
 	@Mock
 	ProductService productService;
 
-	private orderdetail detail1;
-	private orderdetail detail2;
-	private orderdetail detail3;
-	private order order1;
-	private categories cate1;
-	private product prod1;
-	List<orderdetail> listDetail;
+	private Orderdetail detail1;
+	private Orderdetail detail2;
+	private Orderdetail detail3;
+	private Order order1;
+	private Categories cate1;
+	private Product prod1;
+	List<Orderdetail> listDetail;
 	private final int list_size = 3;
 
 	@BeforeEach
 	public void setup() {
-		detail1 = new orderdetail(new OrderDetailsKey(1, "ProdA"), 1, 100.0);
-		detail2 = new orderdetail(new OrderDetailsKey(1, "ProdB"), 2, 200.0);
-		detail3 = new orderdetail(new OrderDetailsKey(1, "ProdC"), 3, 300.0);
-		order1 = new order(1, "Quan 1", 1,
-				new person(1, "doantrungtinn@gmail.com", "123456", "Trung Tin", "ADMIN"));
-		cate1 = new categories(1, "Cate 1", "This is categories number 1", true);
-		prod1 = new product("ProdA", "Product A", (float) 3.45, 2, cate1);
-		listDetail = new ArrayList<orderdetail>(Arrays.asList(detail1, detail2, detail3));
+		detail1 = new Orderdetail(new OrderDetailsKey(1, "ProdA"), 1, 100.0);
+		detail2 = new Orderdetail(new OrderDetailsKey(1, "ProdB"), 2, 200.0);
+		detail3 = new Orderdetail(new OrderDetailsKey(1, "ProdC"), 3, 300.0);
+		order1 = new Order(1, "Quan 1", 1,
+				new Person(1, "doantrungtinn@gmail.com", "123456", "Trung Tin", "ADMIN"));
+		cate1 = new Categories(1, "Cate 1", "This is categories number 1", true);
+		prod1 = new Product("ProdA", "Product A", (float) 3.45, 2, cate1);
+		listDetail = new ArrayList<Orderdetail>(Arrays.asList(detail1, detail2, detail3));
 	}
 
 	@Test
@@ -74,7 +74,7 @@ public class OrderDetailServiceImplTest {
 
 	@Test
 	public void getDetailOrderByOrderIdSuccess_Test() {
-		when(detailRepo.findByIdOrderId(Mockito.anyInt())).thenReturn(new HashSet<orderdetail>() {
+		when(detailRepo.findByIdOrderId(Mockito.anyInt())).thenReturn(new HashSet<Orderdetail>() {
 			{
 				add(detail1);
 				add(detail2);

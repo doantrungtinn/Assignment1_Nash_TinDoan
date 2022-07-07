@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nashtech.FutsalShop.model.orderdetail;
-import com.nashtech.FutsalShop.model.order;
-import com.nashtech.FutsalShop.model.product;
+import com.nashtech.FutsalShop.model.Orderdetail;
+import com.nashtech.FutsalShop.model.Order;
+import com.nashtech.FutsalShop.model.Product;
 import com.nashtech.FutsalShop.repository.OrderDetailRepository;
 import com.nashtech.FutsalShop.services.OrderDetailService;
 import com.nashtech.FutsalShop.services.OrderService;
@@ -34,16 +34,16 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 		this.orderDetailRepo = orderDetailRepo;
 	}
 
-	public List<orderdetail> retrieveOrders() {
+	public List<Orderdetail> retrieveOrders() {
 		return orderDetailRepo.findAll();
 	}
 
-	public Set<orderdetail> getDetailOrderByOrderId(int id) {
+	public Set<Orderdetail> getDetailOrderByOrderId(int id) {
 		return orderDetailRepo.findByIdOrderId(id);
 	}
 
 	@Transactional
-	public boolean createDetail(orderdetail order) {
+	public boolean createDetail(Orderdetail order) {
 		boolean result = productService.updateProductQuantity(order.getId().getProductId(), order.getAmmount() * (-1));
 		if (!result)
 			return false;
@@ -52,9 +52,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 	}
 
 	@Transactional
-	public boolean deleteDetail(orderdetail orderDetailEntity) {
+	public boolean deleteDetail(Orderdetail orderDetailEntity) {
 		int orderId = orderDetailEntity.getId().getOrderId();
-		order order = orderService.getOrder(orderId).get();
+		Order order = orderService.getOrder(orderId).get();
 		if (order.getStatus() != 4) { // False = Not delivery yet
 			boolean result = productService.updateProductQuantity(orderDetailEntity.getId().getProductId(),
 					orderDetailEntity.getAmmount());
@@ -67,7 +67,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 	}
 
 	@Transactional
-	public boolean updateDetailCancel(orderdetail orderDetailEntity) {
+	public boolean updateDetailCancel(Orderdetail orderDetailEntity) {
 //		ProductEntity prod = productService.getProduct(orderDetailEntity.getId().getProductId()).get();
 		boolean result = productService.updateProductQuantityToCancel(orderDetailEntity.getId().getProductId(),
 				orderDetailEntity.getAmmount());
@@ -77,8 +77,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 	}
 
 	@Transactional
-	public boolean updateDetail(orderdetail orderDetailEntity) {
-		product prod = productService.getProduct(orderDetailEntity.getId().getProductId()).get();
+	public boolean updateDetail(Orderdetail orderDetailEntity) {
+		Product prod = productService.getProduct(orderDetailEntity.getId().getProductId()).get();
 		boolean result = productService.updateProductQuantity(orderDetailEntity.getId().getProductId(),
 				orderDetailEntity.getAmmount() * (-1));
 		if (!result)

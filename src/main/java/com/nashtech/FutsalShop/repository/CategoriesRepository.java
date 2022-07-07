@@ -7,17 +7,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.nashtech.FutsalShop.model.categories;
+import com.nashtech.FutsalShop.model.Categories;
 
 @Repository
-public interface CategoriesRepository extends JpaRepository<categories, Integer> {
-	List<categories> findByStatusNot(Sort sort, boolean status);
+public interface CategoriesRepository extends JpaRepository<Categories, Integer> {
+	List<Categories> findByStatusNot(Sort sort, boolean status);
 	
-	Optional<categories> findByIdAndStatusNot(int id, boolean status);
+	Optional<Categories> findByIdAndStatusNot(int id, boolean status);
 	
 	Boolean existsByNameAndStatusNot(String name, boolean status);
 
-	List<categories> findByNameIgnoreCaseAndStatusNot(String name, boolean status);
+	List<Categories> findByNameIgnoreCaseAndStatusNot(String name, boolean status);
 
 	int countByNameAndStatusNot(String name, boolean status);
 }

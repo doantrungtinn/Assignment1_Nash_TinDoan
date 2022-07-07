@@ -6,24 +6,24 @@ import java.util.Optional;
 import javax.mail.MessagingException;
 
 import com.nashtech.FutsalShop.DTO.PersonDTO;
-import com.nashtech.FutsalShop.model.person;
+import com.nashtech.FutsalShop.model.Person;
 
 public interface PersonService {
-	public List<person> retrievePersons();
+	public List<Person> retrievePersons();
 
-	public List<person> getPersonsPage(int num, int size, String role);
+	public List<Person> getPersonsPage(int num, int size, String role);
 	
-	public List<person> searchPerson(String keyword, String role);
+	public List<Person> searchPerson(String keyword, String role);
 	
-	public List<person> searchPersonRoleNot(String keyword, String role);
+	public List<Person> searchPersonRoleNot(String keyword, String role);
 
-	public Optional<person> getPerson(int id);
+	public Optional<Person> getPerson(int id);
 
-	public person getPerson(String email);
+	public Person getPerson(String email);
 
-	public person createPerson(PersonDTO person);
+	public Person createPerson(PersonDTO person);
 
-	public boolean deletePerson(person person);
+	public boolean deletePerson(Person person);
 
 	public boolean updatePerson(PersonDTO person);
 
@@ -31,9 +31,9 @@ public interface PersonService {
 
 	public boolean checkExistEmailUpdate(String email, int id);
 	
-	public person changePassword(String email, String oldPassword, String newPassword);
+	public Person changePassword(String email, String oldPassword, String newPassword);
 	
-	public person forgotPassword(String email, String newPassword);
+	public Person forgotPassword(String email, String newPassword);
 	
 	public void sendOTPEmail(String email) throws MessagingException;
 	

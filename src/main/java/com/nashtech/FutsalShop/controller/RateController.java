@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nashtech.FutsalShop.DTO.RateDTO;
 import com.nashtech.FutsalShop.Utils.StringUtils;
-import com.nashtech.FutsalShop.model.product;
-import com.nashtech.FutsalShop.model.rate;
-import com.nashtech.FutsalShop.model.rate.RateKey;
+import com.nashtech.FutsalShop.model.Product;
+import com.nashtech.FutsalShop.model.Rate;
+import com.nashtech.FutsalShop.model.Rate.RateKey;
 import com.nashtech.FutsalShop.security.JWT.JwtAuthTokenFilter;
 import com.nashtech.FutsalShop.security.JWT.JwtUtils;
 import com.nashtech.FutsalShop.services.RateService;
@@ -41,7 +41,7 @@ public class RateController {
 	@Operation(summary = "Create a Rate for Product")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = product.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Product.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "403", description = "Forbidden: Only User can create a review", content = @Content),
@@ -49,7 +49,7 @@ public class RateController {
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@PostMapping("/product/rate")
 	@PreAuthorize("hasRole('USER') or hasRole('STAFF') or hasRole('ADMIN')")
-	public rate createRateOfProduct(@RequestBody RateDTO rate) {
+	public Rate createRateOfProduct(@RequestBody RateDTO rate) {
 		return rateService.createRate(rate);
 	}
 
@@ -62,7 +62,7 @@ public class RateController {
 	@Operation(summary = "Create a Rate for Product")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = product.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Product.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
@@ -77,7 +77,7 @@ public class RateController {
 
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = product.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Product.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "403", description = "Forbidden: Only User can create a review", content = @Content),

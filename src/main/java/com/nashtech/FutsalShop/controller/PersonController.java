@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nashtech.FutsalShop.DTO.PersonDTO;
 import com.nashtech.FutsalShop.Utils.StringUtils;
-import com.nashtech.FutsalShop.model.person;
+import com.nashtech.FutsalShop.model.Person;
 import com.nashtech.FutsalShop.exception.ObjectNotFoundException;
 import com.nashtech.FutsalShop.services.PersonService;
 import com.nashtech.FutsalShop.payload.response.MessageResponse;
@@ -52,28 +52,28 @@ public class PersonController {
 	@Operation(summary = "Get all Account Infomation by Role")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = person.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Person.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@GetMapping("/persons")
 	@PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
-	public List<person> getPersonbyRole(@RequestParam(name = "pagenum") int page,
+	public List<Person> getPersonbyRole(@RequestParam(name = "pagenum") int page,
                                         @RequestParam(name = "size") int size, @RequestParam(name = "role") String role) {
 		return personService.getPersonsPage(page, size, role);
 	}
 
 	@GetMapping("/persons/search")
 	@PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
-	public List<person> searchPersonbyRole(@RequestParam(name = "keyword") String keyword,
+	public List<Person> searchPersonbyRole(@RequestParam(name = "keyword") String keyword,
                                            @RequestParam(name = "role") String role) {
 		return personService.searchPerson(keyword, role);
 	}
 
 	@GetMapping("/persons/search/roleNot")
 	@PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
-	public List<person> searchPersonbyRoleNot(@RequestParam(name = "keyword") String keyword,
+	public List<Person> searchPersonbyRoleNot(@RequestParam(name = "keyword") String keyword,
                                               @RequestParam(name = "role") String role) {
 		return personService.searchPersonRoleNot(keyword, role);
 	}
@@ -81,14 +81,14 @@ public class PersonController {
 	@Operation(summary = "Get Account Infomation by Id")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = person.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Person.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@GetMapping("/persons/search/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('STAFF') or hasRole('ADMIN')")
-	public person findPerson(@PathVariable(name = "id") int id) {
+	public Person findPerson(@PathVariable(name = "id") int id) {
 		try {
 			return personService.getPerson(id).get();
 		} catch (NoSuchElementException ex) {
@@ -105,7 +105,7 @@ public class PersonController {
 
 	@GetMapping("/persons/search/email/{email}")
 	@PreAuthorize("hasRole('USER') or hasRole('STAFF') or hasRole('ADMIN')")
-	public person findPersonByEmail(@PathVariable(name = "email") String email) {
+	public Person findPersonByEmail(@PathVariable(name = "email") String email) {
 		try {
 			return personService.getPerson(email);
 		} catch (NoSuchElementException ex) {
@@ -116,7 +116,7 @@ public class PersonController {
 	@Operation(summary = "Delete Account by Email")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = person.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Person.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
@@ -127,7 +127,7 @@ public class PersonController {
 		String jwt = JwtAuthTokenFilter.parseJwt(request);
 		String userId = jwtUtils.getUserNameFromJwtToken(jwt);
 		try {
-			person person = personService.getPerson(id).get();
+			Person person = personService.getPerson(id).get();
 			boolean check = personService.deletePerson(person);
 			if (check)
 				logger.info("Account id " + userId + " delete account id " + id + " success");
@@ -148,7 +148,7 @@ public class PersonController {
 	@Operation(summary = "Update Account Infomation")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = person.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Person.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
@@ -186,11 +186,11 @@ public class PersonController {
 		String jwt = JwtAuthTokenFilter.parseJwt(request);
 		String userId = jwtUtils.getUserNameFromJwtToken(jwt);
 		try {
-			person personUpdate = personService.getPerson(Integer.parseInt(userId)).get();
+			Person personUpdate = personService.getPerson(Integer.parseInt(userId)).get();
 			if (!personUpdate.getEmail().equalsIgnoreCase(email)) {
 				logger.error("Account id " + userId + " update Account password failed: Account not have permission");
 			}
-			person updateAccount = personService.changePassword(email, changePasswordRequest.getOldPassword(),
+			Person updateAccount = personService.changePassword(email, changePasswordRequest.getOldPassword(),
 					changePasswordRequest.getNewPassword());
 			if (updateAccount == null) {
 				logger.error("Account id " + userId + " update Account password failed: Not found account with email "+ email);

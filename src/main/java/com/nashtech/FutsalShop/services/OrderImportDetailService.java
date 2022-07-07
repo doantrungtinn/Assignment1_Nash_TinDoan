@@ -1,11 +1,11 @@
 package com.nashtech.FutsalShop.services;
 
 import com.nashtech.FutsalShop.DTO.OrderImportDetailDTO;
-import com.nashtech.FutsalShop.model.orderimportdetail;
+import com.nashtech.FutsalShop.model.Orderimportdetail;
 
 public interface OrderImportDetailService {
 	
-	public orderimportdetail convertToEntity (OrderImportDetailDTO orderImportDetailDto);
+	public Orderimportdetail convertToEntity (OrderImportDetailDTO orderImportDetailDto);
 	
-	public OrderImportDetailDTO convertToDto (orderimportdetail orderImportDetail);
+	public OrderImportDetailDTO convertToDto (Orderimportdetail orderImportDetail);
 }

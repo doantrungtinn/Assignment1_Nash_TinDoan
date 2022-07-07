@@ -21,13 +21,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.nashtech.FutsalShop.DTO.OrderImportDTO;
-import com.nashtech.FutsalShop.model.categories;
-import com.nashtech.FutsalShop.model.orderimportdetail;
-import com.nashtech.FutsalShop.model.orderimportdetail.OrderImportDetailsKey;
+import com.nashtech.FutsalShop.model.Categories;
+import com.nashtech.FutsalShop.model.Orderimportdetail;
+import com.nashtech.FutsalShop.model.Orderimportdetail.OrderImportDetailsKey;
 import com.nashtech.FutsalShop.repository.OrderImportRepository;
-import com.nashtech.FutsalShop.model.orderimport;
-import com.nashtech.FutsalShop.model.person;
-import com.nashtech.FutsalShop.model.product;
+import com.nashtech.FutsalShop.model.Orderimport;
+import com.nashtech.FutsalShop.model.Person;
+import com.nashtech.FutsalShop.model.Product;
 import com.nashtech.FutsalShop.services.OrderImportDetailService;
 import com.nashtech.FutsalShop.services.OrderImportService;
 import com.nashtech.FutsalShop.services.PersonService;
@@ -54,34 +54,34 @@ public class OrderImportServiceImplTest {
 	@Mock
 	OrderImportRepository orderImportRepo;
 
-	private orderimport import1;
-	private orderimport import2;
-	private orderimport import3;
+	private Orderimport import1;
+	private Orderimport import2;
+	private Orderimport import3;
 	private OrderImportDTO import1DTO;
-	private orderimportdetail detail1;
-	private orderimportdetail detail2;
-	private orderimportdetail detail3;
-	private person person1;
-	private product prod1;
-	private List<orderimport> listImport;
-	private Set<orderimportdetail> listDetail;
+	private Orderimportdetail detail1;
+	private Orderimportdetail detail2;
+	private Orderimportdetail detail3;
+	private Person person1;
+	private Product prod1;
+	private List<Orderimport> listImport;
+	private Set<Orderimportdetail> listDetail;
 
 	@BeforeEach
 	public void setup() {
-		detail1 = new orderimportdetail(new OrderImportDetailsKey(1, "ProdA"), 1, (float) 1.0);
-		detail2 = new orderimportdetail(new OrderImportDetailsKey(1, "ProdB"), 2, (float) 2.0);
-		detail3 = new orderimportdetail(new OrderImportDetailsKey(1, "ProdC"), 3, (float) 3.0);
-		person1 = new person(1, "doantrungtinn@gmail.com", "123456", "Trung Tin", "ADMIN");
-		prod1 = new product("ProdA", "Product A", (float) 3.45, 2,
-				new categories(1, "Cate 1", "This is categories number 1", true));
+		detail1 = new Orderimportdetail(new OrderImportDetailsKey(1, "ProdA"), 1, (float) 1.0);
+		detail2 = new Orderimportdetail(new OrderImportDetailsKey(1, "ProdB"), 2, (float) 2.0);
+		detail3 = new Orderimportdetail(new OrderImportDetailsKey(1, "ProdC"), 3, (float) 3.0);
+		person1 = new Person(1, "doantrungtinn@gmail.com", "123456", "Trung Tin", "ADMIN");
+		prod1 = new Product("ProdA", "Product A", (float) 3.45, 2,
+				new Categories(1, "Cate 1", "This is categories number 1", true));
 
 		listDetail = Stream.of(detail1, detail2, detail3).collect(Collectors.toCollection(HashSet::new));
-		import1 = new orderimport(1, true, person1, listDetail);
-		import2 = new orderimport(2, true, person1, listDetail);
-		import3 = new orderimport(3, true, person1, listDetail);
+		import1 = new Orderimport(1, true, person1, listDetail);
+		import2 = new Orderimport(2, true, person1, listDetail);
+		import3 = new Orderimport(3, true, person1, listDetail);
 		import1DTO = new OrderImportDTO();
-		listImport = new ArrayList<orderimport>(List.of(import1, import2, import3));
-		person1.setOrdersImport(new HashSet<orderimport>(listImport));
+		listImport = new ArrayList<Orderimport>(List.of(import1, import2, import3));
+		person1.setOrdersImport(new HashSet<Orderimport>(listImport));
 	}
 
 	@Test

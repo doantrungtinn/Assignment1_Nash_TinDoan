@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nashtech.FutsalShop.model.user;
+import com.nashtech.FutsalShop.model.User;
 import com.nashtech.FutsalShop.repository.UserRepository;
 
 @Service
@@ -21,7 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Transactional
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 
-		user user = userRepository.findById(Integer.valueOf(userId)).orElseThrow(
+		User user = userRepository.findById(Integer.valueOf(userId)).orElseThrow(
 				() -> new UsernameNotFoundException("User Not Found with -> id : " + userId));
 
 		return UserDetailsImpl.build(user);

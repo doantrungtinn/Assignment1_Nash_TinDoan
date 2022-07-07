@@ -18,9 +18,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.nashtech.FutsalShop.DTO.ProductDTO;
 import com.nashtech.FutsalShop.controller.ProductController;
-import com.nashtech.FutsalShop.model.categories;
-import com.nashtech.FutsalShop.model.person;
-import com.nashtech.FutsalShop.model.product;
+import com.nashtech.FutsalShop.model.Categories;
+import com.nashtech.FutsalShop.model.Person;
+import com.nashtech.FutsalShop.model.Product;
 import com.nashtech.FutsalShop.services.ProductService;
 
 @SpringBootTest
@@ -39,10 +39,10 @@ public class ProductControllerTest {
 	@Test
 	@WithMockUser(username = "admin", password = "123456", roles = "ADMIN") 
 	public void testCreateProd() throws Exception{
-		categories cate = new categories(1, "cate1", "cateDes",true);
-		product prod = new product("a1","PRODUCT ENTITY",(float)6.5,4,cate);
+		Categories cate = new Categories(1, "cate1", "cateDes",true);
+		Product prod = new Product("a1","PRODUCT ENTITY",(float)6.5,4,cate);
 		ProductDTO prodDTO = new ProductDTO("a1DTO","PRODUCT DTO",(float)6.5,4,1,"A");
-		person person1= new person(1,"doantrungtinn@gmail.com","123456","Doan Trung Tin","ADMIN");
+		Person person1= new Person(1,"doantrungtinn@gmail.com","123456","Doan Trung Tin","ADMIN");
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		
 		Mockito.when(prodService.createProduct(Mockito.anyObject(),person1.getId())).thenReturn(prod);

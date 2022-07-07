@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.nashtech.FutsalShop.DTO.PersonDTO;
-import com.nashtech.FutsalShop.model.person;
+import com.nashtech.FutsalShop.model.Person;
 import com.nashtech.FutsalShop.exception.ObjectAlreadyExistException;
 import com.nashtech.FutsalShop.exception.ObjectNotFoundException;
 import com.nashtech.FutsalShop.exception.ObjectPropertiesIllegalException;
@@ -44,31 +44,31 @@ public class PersonServiceImpl implements PersonService {
 		this.encoder = encoder;
 	}
 
-	public List<person> retrievePersons() {
+	public List<Person> retrievePersons() {
 		return personRepository.findAll();
 	}
 
-	public Optional<person> getPerson(int id) {
+	public Optional<Person> getPerson(int id) {
 		return personRepository.findById(id);
 	}
 
-	public List<person> searchPerson(String keyword, String role) {
+	public List<Person> searchPerson(String keyword, String role) {
 		return personRepository.searchPerson(keyword.toUpperCase(), role);
 	}
 
-	public List<person> searchPersonRoleNot(String keyword, String role) {
+	public List<Person> searchPersonRoleNot(String keyword, String role) {
 		return personRepository.searchPersonRoleNot(keyword.toUpperCase(), role);
 	}
 
-	public person getPerson(String email) {
-		person person = personRepository.findByEmail(email);
+	public Person getPerson(String email) {
+		Person person = personRepository.findByEmail(email);
 		if (!person.isStatus())
 			throw new ObjectNotFoundException("This account had been disable");
 		else
 			return person;
 	}
 
-	public List<person> getPersonsPage(int num, int size, String role) {
+	public List<Person> getPersonsPage(int num, int size, String role) {
 		Sort sortable = Sort.by("id").descending();
 		Pageable pageable = PageRequest.of(num, size, sortable);
 		if (role.equals("EMPLOYEE"))
@@ -77,17 +77,17 @@ public class PersonServiceImpl implements PersonService {
 			return personRepository.findByRoleAndStatusNot(pageable, role.toUpperCase(), false);
 	}
 
-	public person createPerson(PersonDTO personDTO) {
-		Optional<person> person = personRepository.findById(personDTO.getId());
+	public Person createPerson(PersonDTO personDTO) {
+		Optional<Person> person = personRepository.findById(personDTO.getId());
 		if (person.isPresent()) {
 			throw new ObjectAlreadyExistException("There is a person with email " + person.get().getEmail());
 		} else {
-			com.nashtech.FutsalShop.model.person personEntity = new person(personDTO);
+			Person personEntity = new Person(personDTO);
 			return personRepository.save(personEntity);
 		}
 	}
 
-	public boolean deletePerson(person person) {
+	public boolean deletePerson(Person person) {
 		person.setStatus(false);
 		personRepository.save(person);
 		return true;
@@ -95,9 +95,9 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	public boolean updatePerson(PersonDTO personDTO) {
-		person personEntity = getPerson(personDTO.getId()).get();
+		Person personEntity = getPerson(personDTO.getId()).get();
 		boolean checkEmailChange = personEntity.getEmail().equals(personDTO.getEmail());
-		person person = new person(personDTO);
+		Person person = new Person(personDTO);
 
 		person.setPassword(personEntity.getPassword());
 //		person.setRole(personEntity.getRole());
@@ -105,7 +105,7 @@ public class PersonServiceImpl implements PersonService {
 		if (checkEmailChange) { // Không đổi email
 			personRepository.save(person);
 		} else { // Email được đổi, kiểm tra trùng
-			List<com.nashtech.FutsalShop.model.person> list = personRepository.findByEmailIgnoreCase(personDTO.getEmail());
+			List<Person> list = personRepository.findByEmailIgnoreCase(personDTO.getEmail());
 			if (list.isEmpty()) {
 				personRepository.save(person);
 			} else {
@@ -116,7 +116,7 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	public boolean checkExistEmailUpdate(String email, int id) {
-		List<person> list = personRepository.findByEmailIgnoreCase(email);
+		List<Person> list = personRepository.findByEmailIgnoreCase(email);
 		if (list.isEmpty()) {
 			return true;
 		} else if ((list.size() > 1) || ((list.size() == 1) && (list.get(0).getId() != id)))
@@ -131,8 +131,8 @@ public class PersonServiceImpl implements PersonService {
 		return personRepository.countByRoleAndStatusNot(role, false);
 	}
 
-	public person changePassword(String email, String oldPassword, String newPassword) {
-		person person = getPerson(email);
+	public Person changePassword(String email, String oldPassword, String newPassword) {
+		Person person = getPerson(email);
 		String newPasswordEncoded = encoder.encode(newPassword);
 		boolean isMatched = encoder.matches(oldPassword, person.getPassword());
 		if (!isMatched) {
@@ -164,8 +164,8 @@ public class PersonServiceImpl implements PersonService {
 		return false;
 	}
 
-	public person forgotPassword(String email, String newPassword) {
-		person person = getPerson(email);
+	public Person forgotPassword(String email, String newPassword) {
+		Person person = getPerson(email);
 		String newPasswordEncoded = encoder.encode(newPassword);
 		person.setPassword(newPasswordEncoded);
 		return personRepository.save(person);

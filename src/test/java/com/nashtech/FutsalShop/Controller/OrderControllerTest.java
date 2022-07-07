@@ -22,8 +22,8 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.nashtech.FutsalShop.DTO.OrderDTO;
 import com.nashtech.FutsalShop.DTO.PersonDTO;
 import com.nashtech.FutsalShop.controller.OrderController;
-import com.nashtech.FutsalShop.model.order;
-import com.nashtech.FutsalShop.model.person;
+import com.nashtech.FutsalShop.model.Order;
+import com.nashtech.FutsalShop.model.Person;
 import com.nashtech.FutsalShop.services.OrderService;
 
 
@@ -44,11 +44,11 @@ public class OrderControllerTest {
 	@Test
 	@WithMockUser(username = "admin", password = "123456", roles = "ADMIN")
 	public void testGetOrder() throws Exception {
-		person customers = new person(1,"doantrungtinn@gmail.com","123456","A","ADMIN");
-		order order1 = new order(1,  "A", 1, customers);
-		order order2 = new order(2, "B", 1, customers);
-		order order3 = new order(3,  "C", 1, customers);
-		List<order> listOrder = Arrays.asList(order1,order2,order3);
+		Person customers = new Person(1,"doantrungtinn@gmail.com","123456","A","ADMIN");
+		Order order1 = new Order(1,  "A", 1, customers);
+		Order order2 = new Order(2, "B", 1, customers);
+		Order order3 = new Order(3,  "C", 1, customers);
+		List<Order> listOrder = Arrays.asList(order1,order2,order3);
 
 		Mockito.when(orderService.getOrderPage(Mockito.anyInt(), Mockito.anyInt()))
 											.thenReturn(listOrder);
@@ -68,7 +68,7 @@ public class OrderControllerTest {
 	public void createOrderTest() throws Exception {
 		PersonDTO customers = new PersonDTO(1,"doantrungtinn@gmail.com","123456","A","ADMIN", true);
 		OrderDTO orderDTO = new OrderDTO(  "ABC", 1,"doantrungtinn@gmail.com");
-		order order = new order(1,  "ABC", 1, new person(customers));
+		Order order = new Order(1,  "ABC", 1, new Person(customers));
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
 		Mockito.when(orderService.createOrder(Mockito.anyObject())).thenReturn(order);

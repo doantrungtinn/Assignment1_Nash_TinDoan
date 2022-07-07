@@ -26,13 +26,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.nashtech.FutsalShop.DTO.OrderDTO;
 import com.nashtech.FutsalShop.DTO.OrderDetailDTO;
-import com.nashtech.FutsalShop.model.orderdetail;
-import com.nashtech.FutsalShop.model.order;
-import com.nashtech.FutsalShop.model.orderimportdetail;
-import com.nashtech.FutsalShop.model.orderimport;
-import com.nashtech.FutsalShop.model.person;
-import com.nashtech.FutsalShop.model.product;
-import com.nashtech.FutsalShop.model.orderdetail.OrderDetailsKey;
+import com.nashtech.FutsalShop.model.Orderdetail;
+import com.nashtech.FutsalShop.model.Order;
+import com.nashtech.FutsalShop.model.Orderimportdetail;
+import com.nashtech.FutsalShop.model.Orderimport;
+import com.nashtech.FutsalShop.model.Person;
+import com.nashtech.FutsalShop.model.Product;
+import com.nashtech.FutsalShop.model.Orderdetail.OrderDetailsKey;
 import com.nashtech.FutsalShop.exception.ObjectNotFoundException;
 import com.nashtech.FutsalShop.exception.ObjectPropertiesIllegalException;
 import com.nashtech.FutsalShop.repository.OrderRepository;
@@ -86,12 +86,12 @@ public class OrderServiceImpl implements OrderService {
 		this.orderRepository = orderRepository;
 	}
 
-	public List<order> retrieveOrders() {
+	public List<Order> retrieveOrders() {
 		return orderRepository.findAll();
 
 	}
 
-	public Optional<order> getOrder(int id) {
+	public Optional<Order> getOrder(int id) {
 		return orderRepository.findById(id);
 
 	}
@@ -119,49 +119,49 @@ public class OrderServiceImpl implements OrderService {
 		return id;
 	}
 
-	public List<order> getOrdersByCustomerPages(int num, int size, int id) {
+	public List<Order> getOrdersByCustomerPages(int num, int size, int id) {
 		Sort sortable = Sort.by("timebought").descending();
 		Pageable pageable = PageRequest.of(num, size, sortable);
 		return orderRepository.findByCustomersId(pageable, id);
 	}
 
-	public List<order> searchOrderByCustomer(String keyword) {
+	public List<Order> searchOrderByCustomer(String keyword) {
 
 		return orderRepository.searchOrderByCustomer(keyword.toUpperCase());
 	}
 
-	public List<order> searchOrderByStatusAndCustomer(String keyword, int status) {
+	public List<Order> searchOrderByStatusAndCustomer(String keyword, int status) {
 
 		return orderRepository.searchOrderByStatusAndCustomer(keyword.toUpperCase(), status);
 	}
 
-	public List<order> getOrderPage(int num, int size) {
+	public List<Order> getOrderPage(int num, int size) {
 		Sort sortable = Sort.by("timebought").descending();
 		Pageable pageable = PageRequest.of(num, size, sortable);
 		return orderRepository.findAll(pageable).stream().collect(Collectors.toList());
 	}
 
-	public List<order> getOrderPageByStatus(int num, int size, int status) {
+	public List<Order> getOrderPageByStatus(int num, int size, int status) {
 		Sort sortable = Sort.by("timebought").descending();
 		Pageable pageable = PageRequest.of(num, size, sortable);
 		return orderRepository.findByStatus(pageable, status);
 	}
 
 	public boolean checkOrderedByProductAndCustomerId(String prodId, int customerId) {
-		List<order> listOrder = orderRepository.findByOrderDetailsIdProductIdAndCustomersId(prodId, customerId);
+		List<Order> listOrder = orderRepository.findByOrderDetailsIdProductIdAndCustomersId(prodId, customerId);
 		if (listOrder.isEmpty())
 			return false;
-		for (com.nashtech.FutsalShop.model.order order : listOrder) {
+		for (Order order : listOrder) {
 			if (order.getStatus() == 3)
 				return true;
 		}
 		return false;
 	}
 
-	public OrderDTO convertToDTO(order order) {
+	public OrderDTO convertToDTO(Order order) {
 		OrderDTO orderDTO = mapper.map(order, OrderDTO.class);
 		double totalCost = 0;
-		for (orderdetail detail : order.getOrderDetails()) {
+		for (Orderdetail detail : order.getOrderDetails()) {
 			totalCost += detail.getUnitPrice() * detail.getAmmount();
 		}
 		orderDTO.setTotalCost(totalCost);
@@ -173,21 +173,21 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Transactional
-	public order createOrder(OrderDTO orderDTO) {
-		order order = new order(orderDTO);
+	public Order createOrder(OrderDTO orderDTO) {
+		Order order = new Order(orderDTO);
 		order.setId(generateNewId());
 		order.setTimebought(LocalDateTime.now());
-		person person = personService.getPerson(orderDTO.getCustomersEmail());
+		Person person = personService.getPerson(orderDTO.getCustomersEmail());
 		order.setCustomers(person);
-		order orderSaved = orderRepository.save(order);
+		Order orderSaved = orderRepository.save(order);
 		StringBuilder listProd = new StringBuilder();
 		double totalCost = 0;
 		for (OrderDetailDTO detailDTO : orderDTO.getOrderDetails()) {
-			orderdetail detail = new orderdetail(detailDTO);
+			Orderdetail detail = new Orderdetail(detailDTO);
 			OrderDetailsKey id = new OrderDetailsKey(orderSaved.getId(), detailDTO.getProductId());
 			detail.setId(id);
 			boolean result = orderDetailService.createDetail(detail);
-			product prod = productService.getProduct(detailDTO.getProductId()).get();
+			Product prod = productService.getProduct(detailDTO.getProductId()).get();
 			totalCost += detailDTO.getUnitPrice() * detailDTO.getAmmount();
 			listProd.append(
 					"<p style=\\\"font-size: 14px; line-height: 200%;\\\"><span style=\\\"font-size: 16px; line-height: 32px;\\\">"
@@ -212,8 +212,8 @@ public class OrderServiceImpl implements OrderService {
 
 	@Transactional
 	public boolean updateOrderPayment(int id, int userId) {
-		order order;
-		person person;
+		Order order;
+		Person person;
 		try {
 			order = getOrder(id).get();
 		} catch (NoSuchElementException ex) {
@@ -241,10 +241,10 @@ public class OrderServiceImpl implements OrderService {
 
 	@Transactional
 	public boolean deleteOrder(int id) {
-		order order = getOrder(id).get();
-		person person = personService.getPerson(order.getCustomers().getId()).get();
+		Order order = getOrder(id).get();
+		Person person = personService.getPerson(order.getCustomers().getId()).get();
 		if (order.getStatus() != 4) { // False = Not delivery yet
-			for (orderdetail detail : orderDetailService.getDetailOrderByOrderId(id)) {
+			for (Orderdetail detail : orderDetailService.getDetailOrderByOrderId(id)) {
 				productService.updateProductQuantity(detail.getProduct().getId(), detail.getAmmount());
 			}
 		}
@@ -261,26 +261,26 @@ public class OrderServiceImpl implements OrderService {
 		 * 
 		 */
 		int orderId = orderDTO.getId();
-		order orderCheck = getOrder(orderId).get(); // Nếu không có Order sẽ gây ra lỗi NoSuchElementException
+		Order orderCheck = getOrder(orderId).get(); // Nếu không có Order sẽ gây ra lỗi NoSuchElementException
 															// sẽ được catch ở Controller
 
-		for (orderdetail detail : orderDetailService.getDetailOrderByOrderId(orderId)) {
+		for (Orderdetail detail : orderDetailService.getDetailOrderByOrderId(orderId)) {
 			boolean result = orderDetailService.deleteDetail(detail);
 			if (!result)
 				return false;
 		}
 		for (OrderDetailDTO detailDTO : orderDTO.getOrderDetails()) {
-			orderdetail detail = new orderdetail(detailDTO);
+			Orderdetail detail = new Orderdetail(detailDTO);
 			orderDetailService.createDetail(detail);
 		}
-		orderRepository.save(new order(orderDTO));
+		orderRepository.save(new Order(orderDTO));
 		return true;
 	}
 
 	@Transactional
 	public boolean updateStatusOrder(int id, int status, String userId) {
-		order order;
-		person person;
+		Order order;
+		Person person;
 		try {
 			order = getOrder(id).get();
 		} catch (NoSuchElementException ex) {
@@ -297,7 +297,7 @@ public class OrderServiceImpl implements OrderService {
 			throw new ObjectNotFoundException("Not found this account: " + userId);
 		}
 		if (status == 4 && order.getStatus() != 4) {
-			for (orderdetail detail : orderDetailService.getDetailOrderByOrderId(id)) {
+			for (Orderdetail detail : orderDetailService.getDetailOrderByOrderId(id)) {
 				boolean result = false;
 				try {
 					result = orderDetailService.updateDetailCancel(detail);
@@ -313,7 +313,7 @@ public class OrderServiceImpl implements OrderService {
 				}
 			}
 		} else if (status != 4 && order.getStatus() == 4) {
-			for (orderdetail detail : orderDetailService.getDetailOrderByOrderId(id)) {
+			for (Orderdetail detail : orderDetailService.getDetailOrderByOrderId(id)) {
 				boolean result = false;
 				try {
 					result = orderDetailService.updateDetail(detail);
@@ -341,7 +341,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	public boolean updateNoteOrder(int id, int status, String userId, String note) {
-		order order;
+		Order order;
 		try {
 			order = getOrder(id).get();
 			order.setNote(note);
@@ -352,7 +352,7 @@ public class OrderServiceImpl implements OrderService {
 					"Update order status with Id " + id + " failed: Could not find Order with Id: " + id);
 		}
 		if (status == 4 && order.getStatus() != 4) {
-			for (orderdetail detail : orderDetailService.getDetailOrderByOrderId(id)) {
+			for (Orderdetail detail : orderDetailService.getDetailOrderByOrderId(id)) {
 				boolean result = false;
 				try {
 					result = orderDetailService.updateDetailCancel(detail);
@@ -368,7 +368,7 @@ public class OrderServiceImpl implements OrderService {
 				}
 			}
 		} else if (status != 4 && order.getStatus() == 4) {
-			for (orderdetail detail : orderDetailService.getDetailOrderByOrderId(id)) {
+			for (Orderdetail detail : orderDetailService.getDetailOrderByOrderId(id)) {
 				boolean result = false;
 				try {
 					result = orderDetailService.updateDetail(detail);
@@ -393,7 +393,7 @@ public class OrderServiceImpl implements OrderService {
 		return true;
 	}
 
-	public List<order> getOrderByCustomerEmail(int num, int size, String email) {
+	public List<Order> getOrderByCustomerEmail(int num, int size, String email) {
 		Sort sortable = Sort.by("timebought").descending();
 		Pageable pageable = PageRequest.of(num, size, sortable);
 		return orderRepository.findByCustomersEmail(pageable, email);
@@ -407,12 +407,12 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	public double calculateProfitMonth(int month, int year) {
-		List<order> orderList = orderRepository.getOrderFromMonth(month, year);
+		List<Order> orderList = orderRepository.getOrderFromMonth(month, year);
 		// Profit
 		Map<String, Integer> prodList = new HashMap<>();
 		double profit = 0;
-		for (com.nashtech.FutsalShop.model.order order : orderList) {
-			for (orderdetail detail : order.getOrderDetails()) {
+		for (Order order : orderList) {
+			for (Orderdetail detail : order.getOrderDetails()) {
 				String prodId = detail.getId().getProductId();
 				profit += detail.getAmmount() * detail.getUnitPrice();
 				if (prodList.isEmpty() || !prodList.containsKey(prodId)) {	
@@ -425,11 +425,11 @@ public class OrderServiceImpl implements OrderService {
 		}
 		// Cost
 		for (Map.Entry<String, Integer> entry : prodList.entrySet()) {
-			List<orderimport> importList = importService.getImportByProductId(entry.getKey());
+			List<Orderimport> importList = importService.getImportByProductId(entry.getKey());
 			int index = 0;
 			int amount = prodList.get(entry.getKey());
 			while (amount > 0) {
-				orderimportdetail detailImport = importList.get(index).getOrderImportDetails()
+				Orderimportdetail detailImport = importList.get(index).getOrderImportDetails()
 						.stream().filter(detail -> detail.getId().getProductId().equalsIgnoreCase(entry.getKey())).findFirst().orElse(null);
 				if (amount <= detailImport.getAmmount()) {
 					profit -= amount * detailImport.getPrice();

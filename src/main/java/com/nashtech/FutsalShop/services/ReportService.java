@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.nashtech.FutsalShop.DTO.ReportProdProcess;
 import com.nashtech.FutsalShop.DTO.ReportTopProduct;
-import com.nashtech.FutsalShop.model.product;
+import com.nashtech.FutsalShop.model.Product;
 
 public interface ReportService {
 	public List<Float> profitByYear(int year);
@@ -15,7 +15,7 @@ public interface ReportService {
 	
 	public List<ReportProdProcess> productProccess(int cateId);
 	
-	public List<product> hotProduct(int size);
+	public List<Product> hotProduct(int size);
 	
 	public List<Float> profitMonth(String fromMonth, String toMonth);
 	

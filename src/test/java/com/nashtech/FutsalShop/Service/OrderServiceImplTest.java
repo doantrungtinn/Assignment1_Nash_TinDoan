@@ -30,11 +30,11 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import com.nashtech.FutsalShop.DTO.OrderDTO;
 import com.nashtech.FutsalShop.DTO.OrderDetailDTO;
-import com.nashtech.FutsalShop.model.categories;
-import com.nashtech.FutsalShop.model.orderdetail;
-import com.nashtech.FutsalShop.model.order;
-import com.nashtech.FutsalShop.model.person;
-import com.nashtech.FutsalShop.model.product;
+import com.nashtech.FutsalShop.model.Categories;
+import com.nashtech.FutsalShop.model.Orderdetail;
+import com.nashtech.FutsalShop.model.Order;
+import com.nashtech.FutsalShop.model.Person;
+import com.nashtech.FutsalShop.model.Product;
 import com.nashtech.FutsalShop.exception.ObjectPropertiesIllegalException;
 import com.nashtech.FutsalShop.repository.OrderRepository;
 import com.nashtech.FutsalShop.services.OrderDetailService;
@@ -63,37 +63,37 @@ public class OrderServiceImplTest {
 	@Mock
 	OrderDetailService orderDetailService;
 
-	private order order1;
-	private order order2;
-	private order order3;
-	private order order4;
-	private orderdetail detail1;
+	private Order order1;
+	private Order order2;
+	private Order order3;
+	private Order order4;
+	private Orderdetail detail1;
 	private OrderDetailDTO detail1DTO;
 	private OrderDetailDTO detail2DTO;
 	private OrderDTO order1DTO;
-	private person person1;
-	private categories cate1;
-	private product prod1;
-	List<order> listOrder;
+	private Person person1;
+	private Categories cate1;
+	private Product prod1;
+	List<Order> listOrder;
 	List<OrderDetailDTO> listDetailDTO;
 	private final int list_size = 4;
 
 	@BeforeEach
 	public void setup() {
-		person1 = new person(1, "doantrungtinn@gmail.com", "123456", "Doan Trung Tin", "ADMIN");
-		order1 = new order(1, "Quan 1", 1, person1);
-		order2 = new order(2, "Quan 2", 2, person1);
-		order3 = new order(3, "Quan 3", 3, person1);
-		order4 = new order(4, "Quan 4", 4, person1);
+		person1 = new Person(1, "doantrungtinn@gmail.com", "123456", "Doan Trung Tin", "ADMIN");
+		order1 = new Order(1, "Quan 1", 1, person1);
+		order2 = new Order(2, "Quan 2", 2, person1);
+		order3 = new Order(3, "Quan 3", 3, person1);
+		order4 = new Order(4, "Quan 4", 4, person1);
 		detail1DTO = new OrderDetailDTO(1, "ProdA", 11, 1000.0);
 		detail2DTO = new OrderDetailDTO(2, "ProdB", 22, 2000.0);
 
-		cate1 = new categories(1, "Cate 1", "This is categories number 1", true);
-		prod1 = new product("ProdA", "Product A", (float) 3.45, 2, cate1);
+		cate1 = new Categories(1, "Cate 1", "This is categories number 1", true);
+		prod1 = new Product("ProdA", "Product A", (float) 3.45, 2, cate1);
 		listDetailDTO = new ArrayList<OrderDetailDTO>(List.of(detail1DTO, detail2DTO));
-		listOrder = new ArrayList<order>(List.of(order1, order2, order3, order4));
+		listOrder = new ArrayList<Order>(List.of(order1, order2, order3, order4));
 		order1DTO = new OrderDTO(1, "Quan 1", 1, person1.getEmail(), listDetailDTO);
-		person1.setOrders(new HashSet<order>(listOrder));
+		person1.setOrders(new HashSet<Order>(listOrder));
 	}
 
 	@Test
@@ -105,8 +105,8 @@ public class OrderServiceImplTest {
 	@Test
 	public void createOrderSuccess_Test() throws MessagingException {
 		when(personService.getPerson(Mockito.anyString())).thenReturn(person1);
-		when(orderRepository.save(Mockito.any(order.class))).thenReturn(order1);
-		when(orderDetailService.createDetail(Mockito.any(orderdetail.class))).thenReturn(true);
+		when(orderRepository.save(Mockito.any(Order.class))).thenReturn(order1);
+		when(orderDetailService.createDetail(Mockito.any(Orderdetail.class))).thenReturn(true);
 		when(productService.getProduct(Mockito.anyString())).thenReturn(Optional.of(prod1));
 		when(orderRepository.getById(Mockito.anyInt())).thenReturn(order1);
 		JavaMailSender javaMailSender = spy(new JavaMailSenderImpl());
@@ -115,15 +115,15 @@ public class OrderServiceImplTest {
 				orderDetailService, javaMailSender);
 		doReturn(mimeMessage).when(javaMailSender).createMimeMessage();
 		doNothing().when(javaMailSender).send(Mockito.any(MimeMessage.class));
-		order order_test = orderService_test.createOrder(order1DTO);
+		Order order_test = orderService_test.createOrder(order1DTO);
 		assertEquals(order1DTO.getId(), order_test.getId());
 	}
 
 	@Test
 	public void createOrderFailedAddDetail_Test() {
 		when(personService.getPerson(Mockito.anyString())).thenReturn(person1);
-		when(orderRepository.save(Mockito.any(order.class))).thenReturn(order1);
-		when(orderDetailService.createDetail(Mockito.any(orderdetail.class))).thenReturn(false);
+		when(orderRepository.save(Mockito.any(Order.class))).thenReturn(order1);
+		when(orderDetailService.createDetail(Mockito.any(Orderdetail.class))).thenReturn(false);
 		when(productService.getProduct(Mockito.anyString())).thenReturn(Optional.of(prod1));
 		when(orderRepository.getById(Mockito.anyInt())).thenReturn(order1);
 		assertThrows(ObjectPropertiesIllegalException.class, () -> orderService.createOrder(order1DTO));
@@ -132,28 +132,28 @@ public class OrderServiceImplTest {
 	@Test
 	public void updateOrderSuccess_Test() {
 		when(orderRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(order1));
-		when(orderDetailService.getDetailOrderByOrderId(Mockito.anyInt())).thenReturn(new HashSet<orderdetail>() {
+		when(orderDetailService.getDetailOrderByOrderId(Mockito.anyInt())).thenReturn(new HashSet<Orderdetail>() {
 			{
 				add(detail1);
 			}
 		});
 		when(orderDetailService.deleteDetail(detail1)).thenReturn(true);
-		when(orderDetailService.createDetail(Mockito.any(orderdetail.class))).thenReturn(true);
-		when(orderRepository.save(Mockito.any(order.class))).thenReturn(order1);
+		when(orderDetailService.createDetail(Mockito.any(Orderdetail.class))).thenReturn(true);
+		when(orderRepository.save(Mockito.any(Order.class))).thenReturn(order1);
 		assertTrue(orderService.updateOrder(order1DTO));
 	}
 
 	@Test
 	public void updateOrderFalseDeleteDetail_Test() {
 		when(orderRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(order1));
-		when(orderDetailService.getDetailOrderByOrderId(Mockito.anyInt())).thenReturn(new HashSet<orderdetail>() {
+		when(orderDetailService.getDetailOrderByOrderId(Mockito.anyInt())).thenReturn(new HashSet<Orderdetail>() {
 			{
 				add(detail1);
 			}
 		});
-		when(orderDetailService.deleteDetail(Mockito.any(orderdetail.class))).thenReturn(false);
-		when(orderDetailService.createDetail(Mockito.any(orderdetail.class))).thenReturn(true);
-		when(orderRepository.save(Mockito.any(order.class))).thenReturn(order1);
+		when(orderDetailService.deleteDetail(Mockito.any(Orderdetail.class))).thenReturn(false);
+		when(orderDetailService.createDetail(Mockito.any(Orderdetail.class))).thenReturn(true);
+		when(orderRepository.save(Mockito.any(Order.class))).thenReturn(order1);
 		assertFalse(orderService.updateOrder(order1DTO));
 	}
 
@@ -162,7 +162,7 @@ public class OrderServiceImplTest {
 		when(orderRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(order1));
 		when(personService.getPerson(Mockito.anyInt())).thenReturn(Optional.of(person1));
 		when(productService.updateProductQuantity(Mockito.anyString(), Mockito.anyInt())).thenReturn(true);
-		doNothing().when(orderRepository).delete(Mockito.any(order.class));
+		doNothing().when(orderRepository).delete(Mockito.any(Order.class));
 		assertTrue(orderService.deleteOrder(order1.getId()));
 		assertFalse(person1.getOrders().contains(order1));
 

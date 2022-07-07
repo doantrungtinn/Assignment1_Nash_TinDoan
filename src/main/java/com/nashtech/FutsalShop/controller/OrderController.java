@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nashtech.FutsalShop.DTO.OrderDTO;
 import com.nashtech.FutsalShop.Utils.StringUtils;
-import com.nashtech.FutsalShop.model.order;
+import com.nashtech.FutsalShop.model.Order;
 import com.nashtech.FutsalShop.exception.ObjectNotFoundException;
 import com.nashtech.FutsalShop.exception.ObjectPropertiesIllegalException;
 import com.nashtech.FutsalShop.exception.WrongInputTypeException;
@@ -52,7 +52,7 @@ public class OrderController {
 	@Operation(summary = "Get total of Order")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = order.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
@@ -89,14 +89,14 @@ public class OrderController {
 	@Operation(summary = "Find Order by ID")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = order.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@GetMapping("/order/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('STAFF') or hasRole('ADMIN')")
-	public order findOrder(@PathVariable(name = "id") int id) {
+	public Order findOrder(@PathVariable(name = "id") int id) {
 		return orderService.getOrder(id)
 				.orElseThrow(() -> new ObjectNotFoundException("Could not find order with Id: " + id));
 	}
@@ -104,7 +104,7 @@ public class OrderController {
 	@GetMapping("/orderDTO/{id}")
 	@PreAuthorize("hasRole('USER') or hasRole('STAFF') or hasRole('ADMIN')")
 	public OrderDTO findOrderDTO(@PathVariable(name = "id") int id) {
-		order order = orderService.getOrder(id)
+		Order order = orderService.getOrder(id)
 				.orElseThrow(() -> new ObjectNotFoundException("Could not find order with Id: " + id));
 		 return orderService.convertToDTO(order);
 	}
@@ -112,21 +112,21 @@ public class OrderController {
 	@Operation(summary = "Create Order")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = order.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@PostMapping("/order")
 	@PreAuthorize("hasRole('USER')")
-	public order createOrder(@RequestBody OrderDTO newOrder) {
+	public Order createOrder(@RequestBody OrderDTO newOrder) {
 		return orderService.createOrder(newOrder);
 	}
 
 	@Operation(summary = "Delete Order by ID")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = order.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
@@ -144,7 +144,7 @@ public class OrderController {
 	@Operation(summary = "Update Order")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = order.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
@@ -178,14 +178,14 @@ public class OrderController {
 	@Operation(summary = "Get Order by Customer")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = order.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@GetMapping("/order/customeremail")
 	@PreAuthorize("hasRole('USER') or hasRole('STAFF') or hasRole('ADMIN')")
-	public List<order> findListOrderedByCustomerEmail(@RequestParam(name = "pagenum") int page,
+	public List<Order> findListOrderedByCustomerEmail(@RequestParam(name = "pagenum") int page,
                                                       @RequestParam(name = "size") int size, @RequestParam(name = "email") String email) {
 		return orderService.getOrderByCustomerEmail(page, size, email);
 	}
@@ -193,14 +193,14 @@ public class OrderController {
 	@Operation(summary = "Get Order by CustomerID ")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = order.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@GetMapping("/order/customerid")
 	@PreAuthorize("hasRole('USER') or hasRole('STAFF') or hasRole('ADMIN')")
-	public List<order> findListOrderedByCustomerId(@RequestParam(name = "pagenum") int page,
+	public List<Order> findListOrderedByCustomerId(@RequestParam(name = "pagenum") int page,
                                                    @RequestParam(name = "size") int size, @RequestParam(name = "id") int id) {
 		return orderService.getOrdersByCustomerPages(page, size, id);
 	}
@@ -208,14 +208,14 @@ public class OrderController {
 	@Operation(summary = "Get Order by Page")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "The request has succeeded", content = {
-					@Content(mediaType = "application/json", schema = @Schema(implementation = order.class)) }),
+					@Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) }),
 			@ApiResponse(responseCode = "401", description = "Unauthorized, Need to login first!", content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request: Invalid syntax", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@GetMapping("/order")
 	@PreAuthorize("hasRole('USER') or hasRole('STAFF') or hasRole('ADMIN')")
-	public List<order> getOrder(@RequestParam(name = "pagenum") int page, @RequestParam(name = "size") int size) {
+	public List<Order> getOrder(@RequestParam(name = "pagenum") int page, @RequestParam(name = "size") int size) {
 		return orderService.getOrderPage(page, size);
 	}
 

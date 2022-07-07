@@ -13,9 +13,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.nashtech.FutsalShop.DTO.RateDTO;
-import com.nashtech.FutsalShop.model.person;
-import com.nashtech.FutsalShop.model.product;
-import com.nashtech.FutsalShop.model.rate;
+import com.nashtech.FutsalShop.model.Person;
+import com.nashtech.FutsalShop.model.Product;
+import com.nashtech.FutsalShop.model.Rate;
 import com.nashtech.FutsalShop.exception.ObjectAlreadyExistException;
 import com.nashtech.FutsalShop.exception.ObjectNotFoundException;
 import com.nashtech.FutsalShop.repository.PersonRepository;
@@ -40,7 +40,7 @@ public class RateServiceImpl implements RateService {
 
 	private static final Logger logger = Logger.getLogger(RateServiceImpl.class);
 
-	public List<rate> getRateByProduct(String id) {
+	public List<Rate> getRateByProduct(String id) {
 		return rateRepo.findByProductIdAndCustomerStatusNot(id, false);
 	}
 
@@ -49,7 +49,7 @@ public class RateServiceImpl implements RateService {
 				&& (orderService.checkOrderedByProductAndCustomerId(prodId, customerId));
 	}
 
-	public rate createRate(RateDTO rateDTO) {
+	public Rate createRate(RateDTO rateDTO) {
 		boolean checkExist = rateRepo.existsByProductIdAndCustomerId(rateDTO.getProductId(), rateDTO.getCustomerId());
 		if (checkExist) {
 			logger.error("Account id " + rateDTO.getCustomerId() + " review product with id " + rateDTO.getProductId()
@@ -57,8 +57,8 @@ public class RateServiceImpl implements RateService {
 			throw new ObjectAlreadyExistException("Exist a review with this customer on this product");
 
 		} else {
-			product prod;
-			person person;
+			Product prod;
+			Person person;
 			try {
 				prod = prodRepo.findByIdIgnoreCase(rateDTO.getProductId()).get();
 			} catch (NoSuchElementException ex) {
@@ -76,7 +76,7 @@ public class RateServiceImpl implements RateService {
 						"Not found Rate with CustomerId: " + String.valueOf(rateDTO.getCustomerId()));
 			}
 			try {
-				rate rate = new rate(rateDTO);
+				Rate rate = new Rate(rateDTO);
 				rate.setProduct(prod);
 				rate.setCustomer(person);
 				rate.setDateReview(java.sql.Date.valueOf(LocalDate.now()));
@@ -90,16 +90,16 @@ public class RateServiceImpl implements RateService {
 		}
 	}
 
-	public List<rate> getRateProductPage(String id, int pageNum, int size) {
+	public List<Rate> getRateProductPage(String id, int pageNum, int size) {
 		Sort sortable = Sort.by("dateReview").descending();
 		Pageable pageable = PageRequest.of(pageNum, size, sortable);
 		return rateRepo.findByProductIdAndCustomerStatusNot(pageable, id, false);
 	}
 
 	public boolean deleteRate(int id, String userId) {
-		rate rate;
-		product prod;
-		person person;
+		Rate rate;
+		Product prod;
+		Person person;
 		try {
 			rate = rateRepo.findById(id).get();
 		} catch (NoSuchElementException ex) {
@@ -137,7 +137,7 @@ public class RateServiceImpl implements RateService {
 	public boolean updateRate(RateDTO rateDTO) {
 		boolean check = rateRepo.existsById(rateDTO.getId());
 		if (check) {
-			rate rate = new rate(rateDTO);
+			Rate rate = new Rate(rateDTO);
 			rate.setId(rateDTO.getId());
 			rate.setDateReview(java.sql.Date.valueOf(LocalDate.now()));
 			rateRepo.save(rate);
@@ -151,7 +151,7 @@ public class RateServiceImpl implements RateService {
 	}
 
 	public double getAverageRateNumByProduct(String id) {
-		List<rate> list = rateRepo.findByProductIdAndCustomerStatusNot(id, false);
+		List<Rate> list = rateRepo.findByProductIdAndCustomerStatusNot(id, false);
 		OptionalDouble avg = list.stream().map(rate -> rate.getRateNum()).mapToDouble(a -> a).average();
 		return avg.isPresent() ? avg.getAsDouble() : 0.0;
 	}

@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.nashtech.FutsalShop.model.person;
+import com.nashtech.FutsalShop.model.Person;
 import com.nashtech.FutsalShop.exception.ObjectNotFoundException;
 import com.nashtech.FutsalShop.repository.PersonRepository;
 import com.nashtech.FutsalShop.services.DatabaseService;
@@ -122,7 +122,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 		return commands;
 	}
 
-	public String[] convertToCSV(person person) {
+	public String[] convertToCSV(Person person) {
 		return new String[] { person.getEmail() + "," + person.getPassword() + "," + person.getFullname() + ","
 				+ person.getDob() + "," + person.isGender() + "," + person.getAddress() + "," + person.getPhonenumber()
 				+ "," + person.getRole() + "," + person.isStatus() };

@@ -19,7 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.nashtech.FutsalShop.DTO.PersonDTO;
-import com.nashtech.FutsalShop.model.person;
+import com.nashtech.FutsalShop.model.Person;
 import com.nashtech.FutsalShop.exception.ObjectAlreadyExistException;
 import com.nashtech.FutsalShop.exception.ObjectNotFoundException;
 import com.nashtech.FutsalShop.exception.ObjectPropertiesIllegalException;
@@ -39,51 +39,51 @@ public class PersonServiceImplTest {
 	@InjectMocks
 	PersonService personService = new PersonServiceImpl(personRepository, encoder);
 
-	private person person1;
-	private person person2;
-	private person person3;
+	private Person person1;
+	private Person person2;
+	private Person person3;
 	private PersonDTO person1DTO;
 	private PersonDTO person2DTO;
-	List<person> listPerson;
+	List<Person> listPerson;
 	private final int list_size = 3;
 
 	@BeforeEach
 	public void setup() {
-		person1 = new person(1, "test1@gmail.com", "123456", "Test 1", "ADMIN");
-		person2 = new person(2, "test2@gmail.com", "123456", "Test 2", "STAFF");
-		person3 = new person(3, "test3@gmail.com", "123456", "Test 3", "USER");
+		person1 = new Person(1, "test1@gmail.com", "123456", "Test 1", "ADMIN");
+		person2 = new Person(2, "test2@gmail.com", "123456", "Test 2", "STAFF");
+		person3 = new Person(3, "test3@gmail.com", "123456", "Test 3", "USER");
 		person1DTO = new PersonDTO(1, "test1@gmail.com", "123456", "Test 1", "ADMIN");
 		person2DTO = new PersonDTO(2, "test2@gmail.com", "123456", "Test 2", "STAFF");
-		listPerson = new ArrayList<person>(List.of(person1, person2, person3));
+		listPerson = new ArrayList<Person>(List.of(person1, person2, person3));
 	}
 
 	@Test
 	public void retrievePersonsSuccess_Test() {
 		when(personRepository.findAll()).thenReturn(listPerson);
-		List<person> listPerson_test = personService.retrievePersons();
+		List<Person> listPerson_test = personService.retrievePersons();
 		assertEquals(list_size, listPerson_test.size());
 	}
 
 	@Test
 	public void createPersonSuccess_Test() {
 		when(personRepository.findById(Mockito.anyInt())).thenReturn(Optional.ofNullable(null));
-		when(personRepository.save(Mockito.any(person.class))).thenReturn(person1);
-		person person_test = personService.createPerson(person1DTO);
+		when(personRepository.save(Mockito.any(Person.class))).thenReturn(person1);
+		Person person_test = personService.createPerson(person1DTO);
 		assertEquals(person1, person_test);
 	}
 
 	@Test
 	public void updatePersonSuccess_Test() {
 		when(personRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(person1));
-		when(personRepository.save(Mockito.any(person.class))).thenReturn(person1);
+		when(personRepository.save(Mockito.any(Person.class))).thenReturn(person1);
 		assertTrue(personService.updatePerson(person1DTO));
 	}
 
 	@Test
 	public void updatePersonSuccessWithEmailChange_Test() {
-		List<person> emptyList = new ArrayList<>();
+		List<Person> emptyList = new ArrayList<>();
 		when(personRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(person1));
-		when(personRepository.save(Mockito.any(person.class))).thenReturn(person1);
+		when(personRepository.save(Mockito.any(Person.class))).thenReturn(person1);
 		when(personRepository.findByEmailIgnoreCase(Mockito.anyString())).thenReturn(emptyList);
 		assertTrue(personService.updatePerson(person2DTO));
 	}
@@ -91,14 +91,14 @@ public class PersonServiceImplTest {
 	@Test
 	public void updatePersonFailedEmailIsUsed_Test() {
 		when(personRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(person1));
-		when(personRepository.save(Mockito.any(person.class))).thenReturn(person1);
+		when(personRepository.save(Mockito.any(Person.class))).thenReturn(person1);
 		when(personRepository.findByEmailIgnoreCase(Mockito.anyString())).thenReturn(listPerson);
 		assertThrows(ObjectAlreadyExistException.class, () -> personService.updatePerson(person2DTO));
 	}
 
 	@Test
 	public void checkExistEmailUpdateSuccess_Test() {
-		List<person> emptyList = new ArrayList<>();
+		List<Person> emptyList = new ArrayList<>();
 		when(personRepository.findByEmailIgnoreCase(Mockito.anyString())).thenReturn(emptyList);
 		assertTrue(personService.checkExistEmailUpdate(person1.getEmail(), person1.getId()));
 	}
@@ -111,7 +111,7 @@ public class PersonServiceImplTest {
 
 	@Test
 	public void checkExistEmailUpdateSuccessWithSameEmail_Test() {
-		List<person> personList_Test = new ArrayList<>();
+		List<Person> personList_Test = new ArrayList<>();
 		personList_Test.add(person1);
 		when(personRepository.findByEmailIgnoreCase(Mockito.anyString())).thenReturn(personList_Test);
 		assertTrue(personService.checkExistEmailUpdate(person1.getEmail(), person1.getId()));

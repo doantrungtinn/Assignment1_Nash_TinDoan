@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nashtech.FutsalShop.DTO.PersonDTO;
-import com.nashtech.FutsalShop.model.person;
+import com.nashtech.FutsalShop.model.Person;
 import com.nashtech.FutsalShop.exception.ObjectNotFoundException;
 import com.nashtech.FutsalShop.payload.request.LoginRequest;
 import com.nashtech.FutsalShop.payload.response.JwtResponse;
@@ -77,7 +77,7 @@ public class AuthController {
 			@ApiResponse(responseCode = "405", description = "Method not allow. Using POST to Login", content = @Content) })
 	@PostMapping("/auth/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-		person person = personRepository.findByEmail(loginRequest.getEmail());
+		Person person = personRepository.findByEmail(loginRequest.getEmail());
 		if (person.isStatus()) {
 			Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(person.getId(), loginRequest.getPassword()));
@@ -112,7 +112,7 @@ public class AuthController {
 
 		// Create new user's account
 		signUpRequest.setPassword(encoder.encode(signUpRequest.getPassword()));
-		person user = new person(signUpRequest);
+		Person user = new Person(signUpRequest);
 		personRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
@@ -155,7 +155,7 @@ public class AuthController {
 			@RequestBody LoginRequest loginRequest) {
 		try {
 			if (!email.equalsIgnoreCase(loginRequest.getEmail())) throw new ObjectNotFoundException("Email not the same with body");
-			person updateAccount = personService.forgotPassword(email, loginRequest.getPassword());
+			Person updateAccount = personService.forgotPassword(email, loginRequest.getPassword());
 			if (updateAccount == null)
 				return ResponseEntity.badRequest().body(new MessageResponse("Error: Change password failed."));
 			return ResponseEntity.ok().body(new MessageResponse("Update password successfully."));

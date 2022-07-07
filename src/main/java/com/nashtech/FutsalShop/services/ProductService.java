@@ -4,28 +4,28 @@ import java.util.List;
 import java.util.Optional;
 
 import com.nashtech.FutsalShop.DTO.ProductDTO;
-import com.nashtech.FutsalShop.model.product;
+import com.nashtech.FutsalShop.model.Product;
 
 public interface ProductService {
-	public List<product> retrieveProducts();
+	public List<Product> retrieveProducts();
 	
-	public List<product> retrieveProductsByType(int categoriesId);
+	public List<Product> retrieveProductsByType(int categoriesId);
 
-	public List<product> getProductPage(int num, int size, int categoriesId);
+	public List<Product> getProductPage(int num, int size, int categoriesId);
 
-	public List<product> getProductPageWithSort(int num, int size, int categoriesId, String sortType);
+	public List<Product> getProductPageWithSort(int num, int size, int categoriesId, String sortType);
 
-	public List<product> getNewestProductCategories(int idCategrories, int size);
+	public List<Product> getNewestProductCategories(int idCategrories, int size);
 	
-	public List<product> searchProduct(String keyword);
+	public List<Product> searchProduct(String keyword);
 	
-	public List<product> searchProductByType(String keyword, int type);
+	public List<Product> searchProductByType(String keyword, int type);
 
-	public Optional<product> getProduct(String id);
+	public Optional<Product> getProduct(String id);
 	
-	public Optional<product> getProductInludeDeleted(String id);
+	public Optional<Product> getProductInludeDeleted(String id);
 
-	public product createProduct(ProductDTO product, int id);
+	public Product createProduct(ProductDTO product, int id);
 
 	public boolean deleteProduct(String id, int userId);
 
@@ -35,9 +35,9 @@ public interface ProductService {
 	
 	public boolean updateProductQuantityToCancel(String id, int numberChange);
 
-	public List<product> findProductByCategories(int id);
+	public List<Product> findProductByCategories(int id);
 
-	public product updateDate(product product);
+	public Product updateDate(Product product);
 
 	public int getNumProductByCategories(int id);
 
@@ -47,7 +47,7 @@ public interface ProductService {
 
 	public boolean checkExistId(String id);
 	
-	public product updateProductWithoutCheckAnything (product product);
+	public Product updateProductWithoutCheckAnything (Product product);
 	
-	public ProductDTO convertToDTO(product product);
+	public ProductDTO convertToDTO(Product product);
 }
