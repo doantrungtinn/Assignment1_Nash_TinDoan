@@ -47,7 +47,7 @@ public class ProductController {
 	private JwtUtils jwtUtils;
 
 	@GetMapping("/product/search/{id}")
-	@PreAuthorize("hasRole('USER') or hasRole('STAFF') or hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('USER') or hasRole('STAFF') or hasRole('ADMIN')")
 	public Product getProduct(@PathVariable(name = "id") String id) {
 		return productService.getProductInludeDeleted(id)
 				.orElseThrow(() -> new ObjectNotFoundException("Could not find product with Id: " + id));
@@ -64,7 +64,7 @@ public class ProductController {
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@PostMapping("/product")
-	@PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
+	//@PreAuthorize("hasAuthority('STAFF') or hasAuthority('ADMIN')")
 	public Product saveProduct(HttpServletRequest request, @RequestBody ProductDTO newProduct) {
 		String jwt = JwtAuthTokenFilter.parseJwt(request);
 		String id = jwtUtils.getUserNameFromJwtToken(jwt);
@@ -78,13 +78,13 @@ public class ProductController {
 	}
 
 	@GetMapping("/product/checkExistName/{name}")
-	@PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('STAFF') or hasAuthority('ADMIN')")
 	public boolean checkExistName(@PathVariable(name = "name") String name) {
 		return productService.checkExistName(name);
 	}
 
 	@GetMapping("/product/checkExistNameUpdate")
-	@PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('STAFF') or hasAuthority('ADMIN')")
 	public boolean checkExistName(@RequestParam(name = "name") String name, @RequestParam(name = "id") String id) {
 		return productService.checkExistNameUpdate(id, name);
 	}
@@ -98,7 +98,7 @@ public class ProductController {
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@DeleteMapping("/product/{id}")
-	@PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('STAFF') or hasAuthority('ADMIN')")
 	public String deleteProduct(HttpServletRequest request, @PathVariable(name = "id") String id) {
 		try {
 			String jwt = JwtAuthTokenFilter.parseJwt(request);
@@ -118,7 +118,7 @@ public class ProductController {
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
 	@PutMapping("/product/{id}")
-	@PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('STAFF') or hasAuthority('ADMIN')")
 	public String editProduct(HttpServletRequest request, @RequestBody ProductDTO product,
 			@PathVariable(name = "id") String id) {
 		String jwt = JwtAuthTokenFilter.parseJwt(request);
@@ -130,15 +130,5 @@ public class ProductController {
 		}
 	}
 
-//	@PostMapping("/img")
-//	@PreAuthorize("hasRole('ADMIN')")
-//	public String saveImgProduct(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) {
-//		try {
-//			return productService.storeImage(file, id) ? StringUtils.TRUE : StringUtils.FALSE;
-//			
-//		}catch(Exception e) {
-//			return StringUtils.FALSE;
-//		}
-//	}
 
 }
