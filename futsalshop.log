@@ -1,0 +1,4 @@
+2022-07-12 23:27:46 ERROR ProductServiceImpl:145 - Account id 1 create product IPC06 failed: No found user with ID 1
+2022-07-12 23:28:11 ERROR ProductServiceImpl:145 - Account id 1 create product IPC06 failed: No found user with ID 1
+2022-07-12 23:41:36 ERROR ProductServiceImpl:145 - Account id 1 create product IPC06 failed: No found user with ID 1
+2022-07-13 11:45:14 ERROR ProductServiceImpl:122 - Account id 1 create product IC01 failed: ID had been used
