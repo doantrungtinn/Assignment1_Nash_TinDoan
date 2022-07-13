@@ -1,9 +1,9 @@
 package com.nashtech.FutsalShop.Service;
 
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -68,13 +68,15 @@ public class CategoriesServiceImplTest {
 	}
 
 	@Test
-	public void testCreateCategories_WhenNameExisted() {
+	public void testCreateCategoriesWhenNameExisted() {
 		assertNotNull(categoriesRepo);
 		assertNotNull(categoriesService);
 
 		CategoriesDTO cateDTO = new CategoriesDTO(1, "Cate 1", "This is categories number 1");
 		List<Categories> list = Arrays.asList(cate);
 		when(categoriesRepo.findByNameIgnoreCaseAndStatusNot(cate.getName(),false)).thenReturn(list);
+
+
 		try {
 			assertEquals("There is a category with the same Name",categoriesService.createCategories(cateDTO));
 		} catch (ObjectAlreadyExistException e) {
@@ -85,7 +87,7 @@ public class CategoriesServiceImplTest {
 	}
 
 	@Test
-	public void testCreateCategories_WhenNameNOTExisted() {
+	public void testCreateCategoriesWhenNameNOTExisted() {
 		assertNotNull(categoriesRepo);
 		assertNotNull(categoriesService);
 		CategoriesDTO cateDTO = new CategoriesDTO(1, "Cate 1", "This is categories number 1");
