@@ -110,6 +110,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	public Product createProduct(ProductDTO productDTO, int id) {
+		
 		try {
 			boolean checkName = checkExistName(productDTO.getName());
 			boolean checkId = checkExistId(productDTO.getId());
@@ -129,6 +130,7 @@ public class ProductServiceImpl implements ProductService {
 				productEntity.setUpdateDate(LocalDateTime.now());
 				productEntity.setStatus(true);
 				productEntity.setEmployeeUpdate(employee);
+				productEntity.setPhoto(productDTO.getPhoto());
 				logger.info("Account id " + id + " create product id " + productDTO.getId() + " success");
 				return productRepository.save(productEntity);
 			}

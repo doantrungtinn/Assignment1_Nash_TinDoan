@@ -59,10 +59,9 @@ public class Product {
 	@Column(name = "status")
 	private boolean status;
 
-	@Lob
-	@Type(type = "org.hibernate.type.BinaryType")
+
 	@Column(name = "photo")
-	private byte[] photo;
+	private String photo;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
@@ -198,11 +197,11 @@ public class Product {
 		this.updateDate = updateDate;
 	}
 
-	public byte[] getPhoto() {
+	public String getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(byte[] photo) {
+	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
 

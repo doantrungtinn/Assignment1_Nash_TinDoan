@@ -1,7 +1,9 @@
 package com.nashtech.FutsalShop.controller;
 
+import javax.mail.Multipart;
 import javax.servlet.http.HttpServletRequest;
 
+import com.nashtech.FutsalShop.services.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -32,6 +34,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -42,6 +47,9 @@ public class ProductController {
 	
 	@Autowired
 	private PersonService personService;
+
+	@Autowired
+	CloudinaryService cloudinaryService;
 
 	@Autowired
 	private JwtUtils jwtUtils;
@@ -63,28 +71,45 @@ public class ProductController {
 			@ApiResponse(responseCode = "403", description = "Forbidden: Only ADMIN and STAFF can create Product", content = @Content),
 			@ApiResponse(responseCode = "404", description = "Can not find the requested resource", content = @Content),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content) })
+
 	@PostMapping("/product")
+
 	//@PreAuthorize("hasAuthority('STAFF') or hasAuthority('ADMIN')")
-	public Product saveProduct(HttpServletRequest request, @RequestBody ProductDTO newProduct) {
+	public Product saveProduct(HttpServletRequest request,
+		   	@RequestParam String id,
+			@RequestParam String name,
+			@RequestParam float price,
+			@RequestParam int quantity,
+			@RequestParam int categoriesId,
+			@RequestParam String description,
+			@RequestParam String brand,
+			@RequestParam String nameEmployeeUpdate,
+			@RequestParam MultipartFile photo ) {
+		//ben fe la ong fix cai formdata truyen dung du lieu la dzo day
 		String jwt = JwtAuthTokenFilter.parseJwt(request);
-		String id = jwtUtils.getUserNameFromJwtToken(jwt);
-		return productService.createProduct(newProduct, Integer.parseInt(id));
+		String username = jwtUtils.getUserNameFromJwtToken(jwt);
+		//khuc nay la upload anh nay, neu không loi thi nó sẽ trả ra cho ông cái đường dẫn của ảnh
+		String urlImage = cloudinaryService.upload(photo);
+		ProductDTO newProduct = new ProductDTO(
+				id, name, price, quantity, categoriesId, description,
+				brand, LocalDateTime.now(), LocalDateTime.now(), nameEmployeeUpdate, urlImage
+		);
+//		System.out.println(123);
+		//rồi trong cái tầng service này ông xử lý theo logic của ông r lưu xuống db
+		return productService.createProduct(newProduct, Integer.parseInt(username));
 	}
 
 	@GetMapping("/product/checkExistId/{id}")
-	@PreAuthorize("hasRole('STAFF') or hasRole('ADMIN')")
 	public boolean checkExistId(@PathVariable(name = "id") String id) {
 		return productService.checkExistId(id);
 	}
 
 	@GetMapping("/product/checkExistName/{name}")
-	@PreAuthorize("hasAuthority('STAFF') or hasAuthority('ADMIN')")
 	public boolean checkExistName(@PathVariable(name = "name") String name) {
 		return productService.checkExistName(name);
 	}
 
 	@GetMapping("/product/checkExistNameUpdate")
-	@PreAuthorize("hasAuthority('STAFF') or hasAuthority('ADMIN')")
 	public boolean checkExistName(@RequestParam(name = "name") String name, @RequestParam(name = "id") String id) {
 		return productService.checkExistNameUpdate(id, name);
 	}

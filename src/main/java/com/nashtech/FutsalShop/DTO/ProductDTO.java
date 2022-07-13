@@ -17,9 +17,7 @@ public class ProductDTO {
 	private LocalDateTime createDate;
 	private LocalDateTime updateDate;
 	private String nameEmployeeUpdate;
-	@Lob
-	@Type(type = "org.hibernate.type.BinaryType")
-	private byte[] photo;
+	private String photo;
 
 	public ProductDTO() {
 	}
@@ -35,7 +33,7 @@ public class ProductDTO {
 	}
 
 	public ProductDTO(String id, String name, float price, int quantity, int categories, String description,
-			LocalDateTime createDate, String brand, byte[] photo) {
+			LocalDateTime createDate, String brand, String photo) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -49,7 +47,7 @@ public class ProductDTO {
 	}
 	
 	public ProductDTO(String id, String name, float price, int quantity, int categoriesId, String description,
-			String brand, LocalDateTime createDate, LocalDateTime updateDate, String nameEmployeeUpdate, byte[] photo) {
+			String brand, LocalDateTime createDate, LocalDateTime updateDate, String nameEmployeeUpdate, String photo) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -130,11 +128,11 @@ public class ProductDTO {
 		this.brand = brand;
 	}
 
-	public byte[] getPhoto() {
+	public String getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(byte[] photo) {
+	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
 
